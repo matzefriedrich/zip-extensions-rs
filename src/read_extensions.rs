@@ -6,7 +6,7 @@ use zip::read::ZipFile;
 use zip::result::{ZipResult, ZipError};
 use crate::file_utils::file_write_all_bytes;
 
-trait ZipArchiveExtensions {
+pub trait ZipArchiveExtensions {
     fn extract(&mut self, path: &PathBuf) -> ZipResult<()>;
 }
 
