@@ -3,6 +3,11 @@ name = "zip-extensions"
 version = "0.1.0"
 authors = ["Matthias Friedrich <rushiblegit@gmail.com>"]
 edition = "2018"
+description = "An extension create for zip."
+readme = "README.md"
+repository = "https://github.com/matzefriedrich/zip-extensions-rs"
+license-file = "LICENSE"
+keywords = ["zip", "archive"]
 
 [dependencies]
 zip = "0.5.5"
