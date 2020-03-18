@@ -10,6 +10,14 @@ pub trait ZipArchiveExtensions {
     fn extract(&mut self, path: &PathBuf) -> ZipResult<()>;
 }
 
+/// ```
+/// use std::fs::File;
+/// use zip_extensions::read_extensions::ZipArchiveExtensions;
+///
+/// let file = File::open(archive_file).unwrap();
+/// let mut archive = zip::ZipArchive::new(file).unwrap();
+/// archive.extract(&target_path).unwrap();
+/// ```
 impl<R: Read + io::Seek> ZipArchiveExtensions for ZipArchive<R> {
     /// Extracts the current archive to the given directory path.
     fn extract(&mut self, target_directory: &PathBuf) -> ZipResult<()> {
