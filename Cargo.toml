@@ -1,0 +1,8 @@
+[package]
+name = "zip-extensions"
+version = "0.1.0"
+authors = ["Matthias Friedrich <rushiblegit@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+zip = "0.5.5"
