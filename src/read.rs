@@ -5,6 +5,31 @@ use std::path::PathBuf;
 use zip::read::ZipFile;
 use zip::result::{ZipResult, ZipError};
 use crate::file_utils::file_write_all_bytes;
+use std::fs::File;
+
+/// Extracts a ZIP file to the given directory.
+pub fn zip_extract(archive_file: &PathBuf, target_dir: &PathBuf) -> ZipResult<()> {
+    let file = File::open(archive_file).unwrap();
+    let mut archive = zip::ZipArchive::new(file).unwrap();
+    archive.extract(target_dir)
+}
+
+/// Determines whether the specified file is a ZIP file, or not.
+pub fn is_zip(file: &PathBuf) -> bool {
+    const ZIP_SIGNATURE: [u8; 4] = [0x50, 0x4b, 0x03, 0x04];
+    let mut file = File::open(file).unwrap();
+    let mut buffer: [u8; 4] = [0; 4];
+    let bytes_read = file.read(&mut buffer).unwrap();
+    if bytes_read == buffer.len() && bytes_read == ZIP_SIGNATURE.len() {
+        for i in 0..ZIP_SIGNATURE.len() {
+            if buffer[i] != ZIP_SIGNATURE[i] {
+                return false;
+            }
+        }
+        return true;
+    }
+    false
+}
 
 pub trait ZipArchiveExtensions {
     /// Extracts the current archive to the given directory path.
