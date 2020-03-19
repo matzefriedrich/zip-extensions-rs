@@ -42,14 +42,6 @@ pub trait ZipArchiveExtensions {
     fn entry_path(&mut self, file_number: usize) -> PathBuf;
 }
 
-/// ```
-/// use std::fs::File;
-/// use zip_extensions::read_extensions::ZipArchiveExtensions;
-///
-/// let file = File::open(archive_file).unwrap();
-/// let mut archive = zip::ZipArchive::new(file).unwrap();
-/// archive.extract(&target_path).unwrap();
-/// ```
 impl<R: Read + io::Seek> ZipArchiveExtensions for ZipArchive<R> {
     fn extract(&mut self, target_directory: &PathBuf) -> ZipResult<()> {
         if target_directory.is_dir() == false {
