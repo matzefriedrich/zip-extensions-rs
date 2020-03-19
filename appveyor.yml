@@ -1,0 +1,8 @@
+image: Ubuntu
+install:
+    - sh: |
+        sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get -y install curl mingw-w64
+        sudo curl https://sh.rustup.rs -sSf | sh -s -- -y
+        export PATH="$HOME/.cargo/bin:$PATH"
+build_script:
+    - sh: cargo build
