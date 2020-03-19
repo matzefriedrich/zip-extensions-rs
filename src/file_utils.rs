@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::{PathBuf, Component};
 use std::fs::File;
 use std::io::Write;
 use std::io;
@@ -8,4 +8,23 @@ pub fn file_write_all_bytes(path: PathBuf, bytes: &[u8]) -> io::Result<usize> {
     let mut file = File::create(path).unwrap();
     file.set_len(0).unwrap();
     file.write(bytes)
+}
+
+/// Returns a relative path from one path to another.
+pub(crate) fn make_relative_path(root: &PathBuf, current: &PathBuf) -> PathBuf {
+    let mut result = PathBuf::new();
+    let root_components = root.components().collect::<Vec<Component>>();
+    let current_components = current.components().collect::<Vec<_>>();
+    for i in 0..current_components.len() {
+        let current_path_component: Component = current_components[i];
+        if i < root_components.len() {
+            let other: Component = root_components[i];
+            if other.eq(&current_path_component) == false {
+                break;
+            }
+        } else{
+            result.push(current_path_component)
+        }
+    }
+    result
 }

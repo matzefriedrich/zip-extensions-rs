@@ -8,6 +8,18 @@ An extension crate for https://github.com/mvdnes/zip-rs that provides high-level
 
 ## Usage examples
 
+### Configure dependencies
+
+Add the following dependencies to the `Cargo.toml` file.
+
+````toml
+[dependencies]
+zip = "0.5.5"
+zip-extensions = "0.1.1"
+````
+
+See https://github.com/mvdnes/zip-rs fur further information about `zip` dependencies.
+
 ### Extracting an archive to a directory
 
 The `ZipArchiveExtensions` trait provides the `extract` method that can be used to unzip an archive to a directory.
