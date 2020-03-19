@@ -12,6 +12,9 @@ pub trait ZipArchiveExtensions {
 
     /// Extracts an entry in the zip archive to a file.
     fn extract_file(&mut self, file_number: usize, destination_file_path: &PathBuf, overwrite: bool) -> ZipResult<()>;
+
+    /// Gets an entry´s path.
+    fn entry_path(&mut self, file_number: usize) -> PathBuf;
 }
 
 /// ```
@@ -54,5 +57,10 @@ impl<R: Read + io::Seek> ZipArchiveExtensions for ZipArchive<R> {
             return Ok(());
         }
         return Err(ZipError::Io(Error::new(ErrorKind::InvalidInput, "The specified index does not indicate a file entry.")));
+    }
+
+    fn entry_path(&mut self, file_number: usize) -> PathBuf {
+        let next: ZipFile = self.by_index(file_number).unwrap();
+        return next.sanitized_name();
     }
 }
