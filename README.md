@@ -15,7 +15,7 @@ Add the following dependencies to the `Cargo.toml` file.
 ````toml
 [dependencies]
 zip = "0.5.5"
-zip-extensions = "0.1.4"
+zip-extensions = "0.2.1"
 ````
 
 See https://github.com/mvdnes/zip-rs fur further information about `zip` dependencies.
@@ -34,6 +34,16 @@ let mut archive = zip::ZipArchive::new(file).unwrap();
 archive.extract(&target_path).unwrap();
 ````
 
+Alternatively, the `zip_extract` helper can be used.
+
+````rust
+use zip_extensions::*;
+...
+let archive_file: PathBuf = ...
+let target_dir: PathBuf = ...
+zip_extract(&archive_file, &target_dir).unwrap();
+```` 
+
 ### Creating an archive from a directory
 
 The `ZipWriterExtensions` trait provides the `create_from_directory` and `create_from_directory_with_options` methods that can be used to add an entire directory hierarchy to an archive.
@@ -46,4 +56,14 @@ use zip_extensions::write_extensions::ZipWriterExtensions;
 let file = File::create(archive_file).unwrap();
 let mut zip = ZipWriter::new(file);
 zip.create_from_directory(&source_path).unwrap()
+````
+
+Alternatively, the `zip_create_from_directory` helper can be used.
+
+````rust
+use zip_extensions::*;
+...
+let archive_file: PathBuf = ...
+let source_dir: PathBuf = ...
+zip_create_from_directory(&archive_file, &source_dir).unwrap();
 ````
