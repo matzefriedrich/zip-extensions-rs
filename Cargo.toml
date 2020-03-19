@@ -9,7 +9,9 @@ repository = "https://github.com/matzefriedrich/zip-extensions-rs"
 license = "MIT"
 keywords = ["zip", "archive"]
 exclude = [
-    "*.yml"
+    "**/*.yml",
+    "**/*.json",
+    ".gitignore"
 ]
 
 [dependencies]
