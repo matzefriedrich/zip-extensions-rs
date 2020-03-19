@@ -1,10 +1,13 @@
 use std::path::{PathBuf, Component};
 use std::fs::File;
-use std::io::Write;
+use std::io::{Write, Error, ErrorKind};
 use std::io;
 
 /// Writes all bytes to a file.
-pub fn file_write_all_bytes(path: PathBuf, bytes: &[u8]) -> io::Result<usize> {
+pub fn file_write_all_bytes(path: PathBuf, bytes: &[u8], overwrite: bool) -> io::Result<usize> {
+    if path.exists() && overwrite == false {
+        return Err(Error::new(ErrorKind::AlreadyExists, "The specified file already exists."));
+    }
     let mut file = File::create(path).unwrap();
     file.set_len(0).unwrap();
     file.write(bytes)
@@ -22,7 +25,7 @@ pub(crate) fn make_relative_path(root: &PathBuf, current: &PathBuf) -> PathBuf {
             if other.eq(&current_path_component) == false {
                 break;
             }
-        } else{
+        } else {
             result.push(current_path_component)
         }
     }
