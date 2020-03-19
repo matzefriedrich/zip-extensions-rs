@@ -27,8 +27,23 @@ The `ZipArchiveExtensions` trait provides the `extract` method that can be used 
 ````rust
 use std::fs::File;
 use zip_extensions::read_extensions::ZipArchiveExtensions;
+...
 
-let file = File::open(archive_file).unwrap();
+let file = File::create(archive_file).unwrap();
 let mut archive = zip::ZipArchive::new(file).unwrap();
 archive.extract(&target_path).unwrap();
+````
+
+### Creating an archive from a directory
+
+The `ZipWriterExtensions` trait provides the `create_from_directory` and `create_from_directory_with_options` methods that can be used to add an entire directory hierarchy to a directory.
+
+````rust
+use zip::ZipWriter;
+use zip_extensions::write_extensions::ZipWriterExtensions;
+...
+
+let file = File::create(archive_file).unwrap();
+let mut zip = ZipWriter::new(file);
+zip.create_from_directory(&source_path).unwrap()
 ````
