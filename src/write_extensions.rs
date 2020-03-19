@@ -9,22 +9,19 @@ use crate::file_utils::make_relative_path;
 
 pub trait ZipWriterExtensions {
     /// Creates a zip archive that contains the files and directories from the specified directory.
-    fn create_from_directory(&mut self, file: &PathBuf, directory: &PathBuf) -> ZipResult<()>;
+    fn create_from_directory(&mut self, directory: &PathBuf) -> ZipResult<()>;
 
     /// Creates a zip archive that contains the files and directories from the specified directory, uses the specified compression level.
-    fn create_from_directory_with_options(&mut self, file: &PathBuf, directory: &PathBuf, options: FileOptions) -> ZipResult<()>;
+    fn create_from_directory_with_options(&mut self, directory: &PathBuf, options: FileOptions) -> ZipResult<()>;
 }
 
 impl<W: Write + io::Seek> ZipWriterExtensions for ZipWriter<W> {
-    fn create_from_directory(&mut self, file: &PathBuf, directory: &PathBuf) -> ZipResult<()> {
+    fn create_from_directory(&mut self, directory: &PathBuf) -> ZipResult<()> {
         let options = write::FileOptions::default().compression_method(CompressionMethod::Stored);
-        self.create_from_directory_with_options(file, directory, options)
+        self.create_from_directory_with_options(directory, options)
     }
 
-    fn create_from_directory_with_options(&mut self, file: &PathBuf, directory: &PathBuf, options: FileOptions) -> ZipResult<()> {
-        let zip_file = File::create(file).unwrap();
-        let mut zip_writer = zip::ZipWriter::new(zip_file);
-
+    fn create_from_directory_with_options(&mut self, directory: &PathBuf, options: FileOptions) -> ZipResult<()> {
         let mut paths_queue: Vec<PathBuf> = vec![];
         paths_queue.push(directory.clone());
 
@@ -41,18 +38,18 @@ impl<W: Write + io::Seek> ZipWriterExtensions for ZipWriter<W> {
                     let mut f = File::open(&entry_path).unwrap();
                     f.read_to_end(&mut buffer).unwrap();
                     let relative_path = make_relative_path(&directory, &entry_path);
-                    zip_writer.start_file_from_path(&relative_path, options).unwrap();
-                    zip_writer.write(buffer.as_ref()).unwrap();
+                    self.start_file_from_path(&relative_path, options).unwrap();
+                    self.write(buffer.as_ref()).unwrap();
                     buffer.clear();
                 } else if entry_metadata.is_dir() {
                     let relative_path = make_relative_path(&directory, &entry_path);
-                    zip_writer.add_directory_from_path(&relative_path, options).unwrap();
+                    self.add_directory_from_path(&relative_path, options).unwrap();
                     paths_queue.push(entry_path.clone());
                 }
             }
         }
 
-        zip_writer.finish().unwrap();
+        self.finish().unwrap();
         Ok(())
     }
 }
