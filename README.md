@@ -1,5 +1,6 @@
 # zip-extensions-rs
 
+[![Build status](https://ci.appveyor.com/api/projects/status/41lavncr30iyv5rk/branch/master?svg=true)](https://ci.appveyor.com/project/matzefriedrich/zip-extensions-rs/branch/master)
 ![Crates.io](https://img.shields.io/crates/v/zip-extensions)
 
 
