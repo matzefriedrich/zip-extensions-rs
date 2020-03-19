@@ -1,5 +1,6 @@
 # zip-extensions-rs
 
+![Rust](https://github.com/matzefriedrich/zip-extensions-rs/workflows/Rust/badge.svg)
 [![Build status](https://ci.appveyor.com/api/projects/status/41lavncr30iyv5rk/branch/master?svg=true)](https://ci.appveyor.com/project/matzefriedrich/zip-extensions-rs/branch/master)
 ![Crates.io](https://img.shields.io/crates/v/zip-extensions)
 
@@ -26,7 +27,7 @@ The `ZipArchiveExtensions` trait provides the `extract` method that can be used 
 
 ````rust
 use std::fs::File;
-use zip_extensions::read_extensions::ZipArchiveExtensions;
+use zip_extensions::read::ZipArchiveExtensions;
 ...
 
 let file = File::create(archive_file).unwrap();
@@ -50,7 +51,7 @@ The `ZipWriterExtensions` trait provides the `create_from_directory` and `create
 
 ````rust
 use zip::ZipWriter;
-use zip_extensions::write_extensions::ZipWriterExtensions;
+use zip_extensions::write::ZipWriterExtensions;
 ...
 
 let file = File::create(archive_file).unwrap();
