@@ -14,7 +14,7 @@ pub fn zip_create_from_directory(archive_file: &PathBuf, directory: &PathBuf) ->
 }
 
 /// Creates a zip archive that contains the files and directories from the specified directory, uses the specified compression level.
-pub fn zip_create_from_directory_with_options(archive_file: &PathBuf, directory: &PathBuf, options: FileOptions) -> ZipResult<()>{
+pub fn zip_create_from_directory_with_options(archive_file: &PathBuf, directory: &PathBuf, options: FileOptions) -> ZipResult<()> {
     let file = File::create(archive_file).unwrap();
     let mut zip_writer = zip::ZipWriter::new(file);
     zip_writer.create_from_directory_with_options(directory, options)
