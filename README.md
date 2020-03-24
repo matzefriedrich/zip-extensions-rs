@@ -45,6 +45,23 @@ let target_dir: PathBuf = ...
 zip_extract(&archive_file, &target_dir).unwrap();
 ```` 
 
+### Extracting an archive entry into memory
+
+The `zip_extract_file_to_memory` method can be used to extract entries ad-hoc into memory.
+
+````rust
+use zip_extensions::*;
+
+let archive_file = PathBuf::from_str(r#"Baloo_Da_2.zip"#).unwrap();
+let entry_path = PathBuf::from_str("BalooDa2-Medium.ttf").unwrap();
+
+let mut buffer : Vec<u8> = vec![];
+match zip_extensions::zip_extract_file_to_memory(&archive_file, &entry_path, &mut buffer) {
+    Ok(()) => { println!("Extracted {} bytes from archive.", buffer.len()) },
+    Err(e) => { println!("The entry does not exist.") }
+};
+````
+
 ### Creating an archive from a directory
 
 The `ZipWriterExtensions` trait provides the `create_from_directory` and `create_from_directory_with_options` methods that can be used to add an entire directory hierarchy to an archive.
