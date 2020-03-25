@@ -16,7 +16,7 @@ Add the following dependencies to the `Cargo.toml` file.
 ````toml
 [dependencies]
 zip = "0.5.5"
-zip-extensions = "0.3.0"
+zip-extensions = "0.4.0"
 ````
 
 See https://github.com/mvdnes/zip-rs fur further information about `zip` dependencies.
@@ -56,7 +56,7 @@ let archive_file = PathBuf::from_str(r#"Baloo_Da_2.zip"#).unwrap();
 let entry_path = PathBuf::from_str("BalooDa2-Medium.ttf").unwrap();
 
 let mut buffer : Vec<u8> = vec![];
-match zip_extensions::zip_extract_file_to_memory(&archive_file, &entry_path, &mut buffer) {
+match zip_extract_file_to_memory(&archive_file, &entry_path, &mut buffer) {
     Ok(()) => { println!("Extracted {} bytes from archive.", buffer.len()) },
     Err(e) => { println!("The entry does not exist.") }
 };
