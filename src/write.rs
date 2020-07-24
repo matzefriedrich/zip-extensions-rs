@@ -52,7 +52,7 @@ impl<W: Write + io::Seek> ZipWriterExtensions for ZipWriter<W> {
                     f.read_to_end(&mut buffer).unwrap();
                     let relative_path = make_relative_path(&directory, &entry_path);
                     self.start_file_from_path(&relative_path, options).unwrap();
-                    self.write(buffer.as_ref()).unwrap();
+                    self.write_all(buffer.as_ref()).unwrap();
                     buffer.clear();
                 } else if entry_metadata.is_dir() {
                     let relative_path = make_relative_path(&directory, &entry_path);
