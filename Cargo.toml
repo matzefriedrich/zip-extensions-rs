@@ -1,6 +1,6 @@
 [package]
 name = "zip-extensions"
-version = "0.5.0"
+version = "0.6.0"
 authors = ["Matthias Friedrich <rushiblegit@gmail.com>"]
 edition = "2018"
 description = "An extension create for zip."
@@ -15,4 +15,4 @@ exclude = [
 ]
 
 [dependencies]
-zip = "0.5.5"
+zip = "0.5.8"
