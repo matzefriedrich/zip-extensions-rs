@@ -9,15 +9,15 @@ use std::fs::File;
 
 /// Extracts a ZIP file to the given directory.
 pub fn zip_extract(archive_file: &PathBuf, target_dir: &PathBuf) -> ZipResult<()> {
-    let file = File::open(archive_file).unwrap();
-    let mut archive = zip::ZipArchive::new(file).unwrap();
+    let file = File::open(archive_file)?;
+    let mut archive = zip::ZipArchive::new(file)?;
     archive.extract(target_dir)
 }
 
 /// Extracts and entry in the ZIP archive to the given directory.
 pub fn zip_extract_file(archive_file: &PathBuf, entry_path: &PathBuf, target_dir: &PathBuf, overwrite: bool) -> ZipResult<()> {
-    let file = File::open(archive_file).unwrap();
-    let mut archive = zip::ZipArchive::new(file).unwrap();
+    let file = File::open(archive_file)?;
+    let mut archive = zip::ZipArchive::new(file)?;
     let file_number: usize = match archive.file_number(entry_path){
         Some(index) => index,
         None => return Err(ZipError::FileNotFound)
@@ -28,8 +28,8 @@ pub fn zip_extract_file(archive_file: &PathBuf, entry_path: &PathBuf, target_dir
 
 /// Extracts an entry in the ZIP archive to the given memory buffer.
 pub fn zip_extract_file_to_memory(archive_file: &PathBuf, entry_path: &PathBuf, buffer: &mut Vec<u8>) -> ZipResult<()> {
-    let file = File::open(archive_file).unwrap();
-    let mut archive = zip::ZipArchive::new(file).unwrap();
+    let file = File::open(archive_file)?;
+    let mut archive = zip::ZipArchive::new(file)?;
     let file_number: usize = match archive.file_number(entry_path){
         Some(index) => index,
         None => return Err(ZipError::FileNotFound)
@@ -38,20 +38,27 @@ pub fn zip_extract_file_to_memory(archive_file: &PathBuf, entry_path: &PathBuf, 
 }
 
 /// Determines whether the specified file is a ZIP file, or not.
-pub fn is_zip(file: &PathBuf) -> bool {
+pub fn try_is_zip(file: &PathBuf) -> ZipResult<bool> {
     const ZIP_SIGNATURE: [u8; 4] = [0x50, 0x4b, 0x03, 0x04];
-    let mut file = File::open(file).unwrap();
+    let mut file = File::open(file)?;
     let mut buffer: [u8; 4] = [0; 4];
-    let bytes_read = file.read(&mut buffer).unwrap();
+    let bytes_read = file.read(&mut buffer)?;
     if bytes_read == buffer.len() && bytes_read == ZIP_SIGNATURE.len() {
         for i in 0..ZIP_SIGNATURE.len() {
             if buffer[i] != ZIP_SIGNATURE[i] {
-                return false;
+                return Ok(false);
             }
         }
-        return true;
+        return Ok(true);
     }
-    false
+    Ok(false)
+}
+
+pub fn is_zip(file: &PathBuf) -> bool {
+    match try_is_zip(file) {
+        Ok(r) => r,
+        Err(_) => false,
+    }
 }
 
 pub trait ZipArchiveExtensions {
@@ -65,7 +72,7 @@ pub trait ZipArchiveExtensions {
     fn extract_file_to_memory(&mut self, file_number: usize, buffer: &mut Vec<u8>) -> ZipResult<()>;
 
     /// Gets an entry´s path.
-    fn entry_path(&mut self, file_number: usize) -> PathBuf;
+    fn entry_path(&mut self, file_number: usize) -> ZipResult<PathBuf>;
 
     /// Finds the index of the specified entry.
     fn file_number(&mut self, entry_path: &PathBuf) -> Option<usize>;
@@ -78,16 +85,16 @@ impl<R: Read + io::Seek> ZipArchiveExtensions for ZipArchive<R> {
         }
 
         for file_number in 0..self.len() {
-            let mut next: ZipFile = self.by_index(file_number).unwrap();
+            let mut next: ZipFile = self.by_index(file_number)?;
             let sanitized_name = next.sanitized_name();
             if next.is_dir() {
                 let extracted_folder_path = target_directory.join(sanitized_name);
-                std::fs::create_dir_all(extracted_folder_path).unwrap();
+                std::fs::create_dir_all(extracted_folder_path)?;
             } else if next.is_file() {
                 let mut buffer: Vec<u8> = Vec::new();
-                let _bytes_read = next.read_to_end(&mut buffer).unwrap();
+                let _bytes_read = next.read_to_end(&mut buffer)?;
                 let extracted_file_path = target_directory.join(sanitized_name);
-                file_write_all_bytes(extracted_file_path, buffer.as_ref(), true).unwrap();
+                file_write_all_bytes(extracted_file_path, buffer.as_ref(), true)?;
             }
         }
 
@@ -96,31 +103,32 @@ impl<R: Read + io::Seek> ZipArchiveExtensions for ZipArchive<R> {
 
     fn extract_file(&mut self, file_number: usize, destination_file_path: &PathBuf, overwrite: bool) -> ZipResult<()> {
         let mut buffer: Vec<u8> = Vec::new();
-        self.extract_file_to_memory(file_number, &mut buffer).unwrap();
-        file_write_all_bytes(destination_file_path.to_path_buf(), buffer.as_ref(), overwrite).unwrap();
+        self.extract_file_to_memory(file_number, &mut buffer)?;
+        file_write_all_bytes(destination_file_path.to_path_buf(), buffer.as_ref(), overwrite)?;
         return Ok(());
     }
 
     fn extract_file_to_memory(&mut self, file_number: usize, buffer: &mut Vec<u8>) -> ZipResult<()> {
-        let mut next: ZipFile = self.by_index(file_number).unwrap();
+        let mut next: ZipFile = self.by_index(file_number)?;
         if next.is_file() {
-            let _bytes_read = next.read_to_end(buffer).unwrap();
+            let _bytes_read = next.read_to_end(buffer)?;
             return Ok(());
         }
         return Err(ZipError::Io(Error::new(ErrorKind::InvalidInput, "The specified index does not indicate a file entry.")));
     }
 
-    fn entry_path(&mut self, file_number: usize) -> PathBuf {
-        let next: ZipFile = self.by_index(file_number).unwrap();
-        return next.sanitized_name();
+    fn entry_path(&mut self, file_number: usize) -> ZipResult<PathBuf> {
+        let next: ZipFile = self.by_index(file_number)?;
+        return Ok(next.sanitized_name());
     }
 
     fn file_number(&mut self, entry_path: &PathBuf) -> Option<usize> {
         for file_number in 0..self.len() {
-            let next: ZipFile = self.by_index(file_number).unwrap();
-            let sanitized_name = next.sanitized_name();
-            if sanitized_name == *entry_path{
-                return Some(file_number);
+            if let Ok(next) = self.by_index(file_number) {
+                let sanitized_name = next.sanitized_name();
+                if sanitized_name == *entry_path{
+                    return Some(file_number);
+                }
             }
         }
         None
