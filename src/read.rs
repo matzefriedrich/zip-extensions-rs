@@ -18,7 +18,7 @@ pub fn zip_extract(archive_file: &PathBuf, target_dir: &PathBuf) -> ZipResult<()
 pub fn zip_extract_file(archive_file: &PathBuf, entry_path: &PathBuf, target_dir: &PathBuf, overwrite: bool) -> ZipResult<()> {
     let file = File::open(archive_file)?;
     let mut archive = zip::ZipArchive::new(file)?;
-    let file_number: usize = match archive.file_number(entry_path){
+    let file_number: usize = match archive.file_number(entry_path) {
         Some(index) => index,
         None => return Err(ZipError::FileNotFound)
     };
@@ -30,7 +30,7 @@ pub fn zip_extract_file(archive_file: &PathBuf, entry_path: &PathBuf, target_dir
 pub fn zip_extract_file_to_memory(archive_file: &PathBuf, entry_path: &PathBuf, buffer: &mut Vec<u8>) -> ZipResult<()> {
     let file = File::open(archive_file)?;
     let mut archive = zip::ZipArchive::new(file)?;
-    let file_number: usize = match archive.file_number(entry_path){
+    let file_number: usize = match archive.file_number(entry_path) {
         Some(index) => index,
         None => return Err(ZipError::FileNotFound)
     };
@@ -39,21 +39,28 @@ pub fn zip_extract_file_to_memory(archive_file: &PathBuf, entry_path: &PathBuf, 
 
 /// Determines whether the specified file is a ZIP file, or not.
 pub fn try_is_zip(file: &PathBuf) -> ZipResult<bool> {
-    const ZIP_SIGNATURE: [u8; 4] = [0x50, 0x4b, 0x03, 0x04];
+    const ZIP_SIGNATURE: [u8; 2] = [0x50, 0x4b];
+    const ZIP_ARCHIVE_FORMAT: [u8; 6] = [0x03, 0x04, 0x05, 0x06, 0x07, 0x08];
     let mut file = File::open(file)?;
     let mut buffer: [u8; 4] = [0; 4];
     let bytes_read = file.read(&mut buffer)?;
-    if bytes_read == buffer.len() && bytes_read == ZIP_SIGNATURE.len() {
+    if bytes_read == buffer.len() {
         for i in 0..ZIP_SIGNATURE.len() {
             if buffer[i] != ZIP_SIGNATURE[i] {
                 return Ok(false);
             }
         }
-        return Ok(true);
+
+        for i in (0..ZIP_ARCHIVE_FORMAT.len()).step_by(2) {
+            if buffer[2] == ZIP_ARCHIVE_FORMAT[i] || buffer[3] == ZIP_ARCHIVE_FORMAT[i + 1] {
+                return Ok(true);
+            }
+        }
     }
     Ok(false)
 }
 
+/// Determines whether the specified file is a ZIP file, or not.
 pub fn is_zip(file: &PathBuf) -> bool {
     match try_is_zip(file) {
         Ok(r) => r,
@@ -126,7 +133,7 @@ impl<R: Read + io::Seek> ZipArchiveExtensions for ZipArchive<R> {
         for file_number in 0..self.len() {
             if let Ok(next) = self.by_index(file_number) {
                 let sanitized_name = next.sanitized_name();
-                if sanitized_name == *entry_path{
+                if sanitized_name == *entry_path {
                     return Some(file_number);
                 }
             }

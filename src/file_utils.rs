@@ -8,8 +8,8 @@ pub fn file_write_all_bytes(path: PathBuf, bytes: &[u8], overwrite: bool) -> io:
     if path.exists() && overwrite == false {
         return Err(Error::new(ErrorKind::AlreadyExists, "The specified file already exists."));
     }
-    let mut file = File::create(path).unwrap();
-    file.set_len(0).unwrap();
+    let mut file = File::create(path)?;
+    file.set_len(0)?;
     file.write(bytes)
 }
 
