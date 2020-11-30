@@ -15,8 +15,8 @@ Add the following dependencies to the `Cargo.toml` file.
 
 ````toml
 [dependencies]
-zip = "0.5.5"
-zip-extensions = "0.5.0"
+zip = "0.5.8"
+zip-extensions = "0.6.0"
 ````
 
 See https://github.com/mvdnes/zip-rs fur further information about `zip` dependencies.
