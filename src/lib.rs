@@ -10,9 +10,9 @@ pub mod write;
 #[cfg(test)]
 mod tests {
     use crate::{is_zip, zip_create_from_directory};
+    use std::fs::File;
     use std::path::PathBuf;
     use std::str::FromStr;
-    use std::fs::File;
 
     #[test]
     fn is_zip_returns_false_if_file_does_not_exists() {
