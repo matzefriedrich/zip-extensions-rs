@@ -43,7 +43,7 @@ pub fn zip_extract_file_to_memory(
         Some(index) => index,
         None => return Err(ZipError::FileNotFound),
     };
-    return archive.extract_file_to_memory(file_number, buffer);
+    archive.extract_file_to_memory(file_number, buffer)
 }
 
 /// Determines whether the specified file is a ZIP file, or not.
@@ -71,10 +71,7 @@ pub fn try_is_zip(file: &PathBuf) -> ZipResult<bool> {
 
 /// Determines whether the specified file is a ZIP file, or not.
 pub fn is_zip(file: &PathBuf) -> bool {
-    match try_is_zip(file) {
-        Ok(r) => r,
-        Err(_) => false,
-    }
+    try_is_zip(file).unwrap_or_default()
 }
 
 pub trait ZipArchiveExtensions {
@@ -102,7 +99,7 @@ pub trait ZipArchiveExtensions {
 
 impl<R: Read + io::Seek> ZipArchiveExtensions for ZipArchive<R> {
     fn extract(&mut self, target_directory: &PathBuf) -> ZipResult<()> {
-        if target_directory.is_dir() == false {
+        if !target_directory.is_dir() {
             return Err(ZipError::Io(Error::new(
                 ErrorKind::InvalidInput,
                 "The specified path does not indicate a valid directory path.",
@@ -139,7 +136,7 @@ impl<R: Read + io::Seek> ZipArchiveExtensions for ZipArchive<R> {
             buffer.as_ref(),
             overwrite,
         )?;
-        return Ok(());
+        Ok(())
     }
 
     fn extract_file_to_memory(
@@ -152,15 +149,15 @@ impl<R: Read + io::Seek> ZipArchiveExtensions for ZipArchive<R> {
             let _bytes_read = next.read_to_end(buffer)?;
             return Ok(());
         }
-        return Err(ZipError::Io(Error::new(
+        Err(ZipError::Io(Error::new(
             ErrorKind::InvalidInput,
             "The specified index does not indicate a file entry.",
-        )));
+        )))
     }
 
     fn entry_path(&mut self, file_number: usize) -> ZipResult<PathBuf> {
         let next: ZipFile = self.by_index(file_number)?;
-        return Ok(next.sanitized_name());
+        Ok(next.sanitized_name())
     }
 
     fn file_number(&mut self, entry_path: &PathBuf) -> Option<usize> {

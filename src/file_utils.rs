@@ -5,7 +5,7 @@ use std::path::{Component, PathBuf};
 
 /// Writes all bytes to a file.
 pub fn file_write_all_bytes(path: PathBuf, bytes: &[u8], overwrite: bool) -> io::Result<usize> {
-    if path.exists() && overwrite == false {
+    if path.exists() && !overwrite {
         return Err(Error::new(
             ErrorKind::AlreadyExists,
             "The specified file already exists.",
@@ -25,7 +25,7 @@ pub(crate) fn make_relative_path(root: &PathBuf, current: &PathBuf) -> PathBuf {
         let current_path_component: Component = current_components[i];
         if i < root_components.len() {
             let other: Component = root_components[i];
-            if other.eq(&current_path_component) == false {
+            if other != current_path_component {
                 break;
             }
         } else {

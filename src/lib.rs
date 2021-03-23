@@ -9,8 +9,8 @@ pub mod write;
 
 #[cfg(test)]
 mod tests {
-    use crate::{is_zip, zip_create_from_directory};
-    use std::fs::File;
+    use crate::is_zip;
+    use std::fs::{self, File};
     use std::path::PathBuf;
     use std::str::FromStr;
 
@@ -29,7 +29,7 @@ mod tests {
         zip_writer.set_comment("This is an empty ZIP file.");
         zip_writer.finish().unwrap();
         let actual = is_zip(&archive_file);
-        std::fs::remove_file(&archive_file.as_path());
+        fs::remove_file(&archive_file.as_path()).unwrap();
         assert_eq!(actual, true)
     }
 }
