@@ -1,9 +1,9 @@
 [package]
 name = "zip-extensions"
-version = "0.6.0"
+version = "0.6.1"
 authors = ["Matthias Friedrich <rushiblegit@gmail.com>"]
 edition = "2018"
-description = "An extension create for zip."
+description = "An extension crate for zip."
 readme = "README.md"
 repository = "https://github.com/matzefriedrich/zip-extensions-rs"
 license = "MIT"
@@ -15,4 +15,4 @@ exclude = [
 ]
 
 [dependencies]
-zip = "0.5.8"
+zip = "0.5"
