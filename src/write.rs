@@ -1,11 +1,11 @@
+use crate::file_utils::make_relative_path;
 use std::fs::File;
-use std::io::{Write, Read};
 use std::io;
+use std::io::{Read, Write};
 use std::path::PathBuf;
-use zip::{ZipWriter, write, CompressionMethod};
 use zip::result::ZipResult;
 use zip::write::FileOptions;
-use crate::file_utils::make_relative_path;
+use zip::{write, CompressionMethod, ZipWriter};
 
 /// Creates a zip archive that contains the files and directories from the specified directory.
 pub fn zip_create_from_directory(archive_file: &PathBuf, directory: &PathBuf) -> ZipResult<()> {
@@ -14,7 +14,11 @@ pub fn zip_create_from_directory(archive_file: &PathBuf, directory: &PathBuf) ->
 }
 
 /// Creates a zip archive that contains the files and directories from the specified directory, uses the specified compression level.
-pub fn zip_create_from_directory_with_options(archive_file: &PathBuf, directory: &PathBuf, options: FileOptions) -> ZipResult<()> {
+pub fn zip_create_from_directory_with_options(
+    archive_file: &PathBuf,
+    directory: &PathBuf,
+    options: FileOptions,
+) -> ZipResult<()> {
     let file = File::create(archive_file)?;
     let mut zip_writer = zip::ZipWriter::new(file);
     zip_writer.create_from_directory_with_options(directory, options)
@@ -25,7 +29,11 @@ pub trait ZipWriterExtensions {
     fn create_from_directory(&mut self, directory: &PathBuf) -> ZipResult<()>;
 
     /// Creates a zip archive that contains the files and directories from the specified directory, uses the specified compression level.
-    fn create_from_directory_with_options(&mut self, directory: &PathBuf, options: FileOptions) -> ZipResult<()>;
+    fn create_from_directory_with_options(
+        &mut self,
+        directory: &PathBuf,
+        options: FileOptions,
+    ) -> ZipResult<()>;
 }
 
 impl<W: Write + io::Seek> ZipWriterExtensions for ZipWriter<W> {
@@ -34,7 +42,11 @@ impl<W: Write + io::Seek> ZipWriterExtensions for ZipWriter<W> {
         self.create_from_directory_with_options(directory, options)
     }
 
-    fn create_from_directory_with_options(&mut self, directory: &PathBuf, options: FileOptions) -> ZipResult<()> {
+    fn create_from_directory_with_options(
+        &mut self,
+        directory: &PathBuf,
+        options: FileOptions,
+    ) -> ZipResult<()> {
         let mut paths_queue: Vec<PathBuf> = vec![];
         paths_queue.push(directory.clone());
 
