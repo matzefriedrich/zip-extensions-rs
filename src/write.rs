@@ -1,4 +1,4 @@
-use crate::file_utils::make_relative_path;
+use crate::file_utils::{make_relative_path, path_as_string};
 use std::fs::File;
 use std::io;
 use std::io::{Read, Write};
@@ -62,12 +62,12 @@ impl<W: Write + io::Seek> ZipWriterExtensions for ZipWriter<W> {
                     let mut f = File::open(&entry_path)?;
                     f.read_to_end(&mut buffer)?;
                     let relative_path = make_relative_path(&directory, &entry_path);
-                    self.start_file_from_path(&relative_path, options)?;
+                    self.start_file(path_as_string(&relative_path), options)?;
                     self.write_all(buffer.as_ref())?;
                     buffer.clear();
                 } else if entry_metadata.is_dir() {
                     let relative_path = make_relative_path(&directory, &entry_path);
-                    self.add_directory_from_path(&relative_path, options)?;
+                    self.add_directory(path_as_string(&relative_path), options)?;
                     paths_queue.push(entry_path.clone());
                 }
             }
