@@ -15,7 +15,7 @@ Add the following dependencies to the `Cargo.toml` file.
 
 ````toml
 [dependencies]
-zip = "0.5"
+zip = "0.6"
 zip-extensions = "0.6"
 ````
 
