@@ -34,3 +34,17 @@ pub(crate) fn make_relative_path(root: &PathBuf, current: &PathBuf) -> PathBuf {
     }
     result
 }
+
+// Returns a String representing the given Path.
+pub(crate) fn path_as_string(path: &std::path::Path) -> String {
+    let mut path_str = String::new();
+    for component in path.components() {
+        if let std::path::Component::Normal(os_str) = component {
+            if !path_str.is_empty() {
+                path_str.push('/');
+            }
+            path_str.push_str(&*os_str.to_string_lossy());
+        }
+    }
+    path_str
+}
