@@ -10,7 +10,7 @@ use zip::ZipArchive;
 /// Extracts a ZIP file to the given directory.
 pub fn zip_extract(archive_file: &PathBuf, target_dir: &PathBuf) -> ZipResult<()> {
     let file = File::open(archive_file)?;
-    let mut archive = zip::ZipArchive::new(file)?;
+    let mut archive = ZipArchive::new(file)?;
     archive.extract(target_dir)
 }
 
@@ -22,7 +22,7 @@ pub fn zip_extract_file(
     overwrite: bool,
 ) -> ZipResult<()> {
     let file = File::open(archive_file)?;
-    let mut archive = zip::ZipArchive::new(file)?;
+    let mut archive = ZipArchive::new(file)?;
     let file_number: usize = match archive.file_number(entry_path) {
         Some(index) => index,
         None => return Err(ZipError::FileNotFound),
@@ -38,7 +38,7 @@ pub fn zip_extract_file_to_memory(
     buffer: &mut Vec<u8>,
 ) -> ZipResult<()> {
     let file = File::open(archive_file)?;
-    let mut archive = zip::ZipArchive::new(file)?;
+    let mut archive = ZipArchive::new(file)?;
     let file_number: usize = match archive.file_number(entry_path) {
         Some(index) => index,
         None => return Err(ZipError::FileNotFound),

@@ -1,15 +1,17 @@
-use crate::file_utils::{make_relative_path, path_as_string};
 use std::fs::File;
 use std::io;
 use std::io::{Read, Write};
 use std::path::PathBuf;
+
+use zip::{CompressionMethod, ZipWriter};
 use zip::result::ZipResult;
 use zip::write::FileOptions;
-use zip::{write, CompressionMethod, ZipWriter};
+
+use crate::file_utils::{make_relative_path, path_as_string};
 
 /// Creates a zip archive that contains the files and directories from the specified directory.
 pub fn zip_create_from_directory(archive_file: &PathBuf, directory: &PathBuf) -> ZipResult<()> {
-    let options = write::FileOptions::default().compression_method(CompressionMethod::Stored);
+    let options = FileOptions::default().compression_method(CompressionMethod::Stored);
     zip_create_from_directory_with_options(archive_file, directory, |_| options)
 }
 
@@ -23,7 +25,7 @@ where
     F: Fn(&PathBuf) -> FileOptions,
 {
     let file = File::create(archive_file)?;
-    let mut zip_writer = zip::ZipWriter::new(file);
+    let mut zip_writer = ZipWriter::new(file);
     zip_writer.create_from_directory_with_options(directory, options_map)
 }
 
@@ -43,7 +45,7 @@ pub trait ZipWriterExtensions {
 
 impl<W: Write + io::Seek> ZipWriterExtensions for ZipWriter<W> {
     fn create_from_directory(&mut self, directory: &PathBuf) -> ZipResult<()> {
-        let options = write::FileOptions::default().compression_method(CompressionMethod::Stored);
+        let options = FileOptions::default().compression_method(CompressionMethod::Stored);
         self.create_from_directory_with_options(directory, |_| options)
     }
 
