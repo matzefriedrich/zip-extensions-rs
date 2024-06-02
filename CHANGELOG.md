@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2024-06-02
+
+The project follows the active development of the `zip` crate and has thus been updated to work with **zip2**; this release comes with several breaking changes in the `write` module.
+
+### Changed
+
+- Upgrades the `zip` package reference; uses the new **zip2** version
+- Adds `FileOptionExtension` type argument to the `zip_create_from_directory_with_options` trait and implementation to address zip2 build issues
+- Removes the `mut` modifier from the `ZipWriterExtensions` to fix issues
+
+
 ## [0.7.0] - 2024-06-01
 
 ### Changed
