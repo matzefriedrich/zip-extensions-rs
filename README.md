@@ -5,7 +5,7 @@
 ![Crates.io](https://img.shields.io/crates/v/zip-extensions)
 
 
-An extension crate for https://github.com/mvdnes/zip-rs that provides high-level functions for common ZIP tasks, such as extracting archives to a directory.
+An extension crate for https://github.com/zip-rs/zip2 that provides high-level functions for common ZIP tasks, such as extracting archives to a directory.
 
 ## Usage examples
 
@@ -15,11 +15,11 @@ Add the following dependencies to the `Cargo.toml` file.
 
 ````toml
 [dependencies]
-zip = "0.6"
-zip-extensions = "0.6"
+zip = "2.1.1"
+zip-extensions = "2.7.0"
 ````
 
-See https://github.com/mvdnes/zip-rs fur further information about `zip` dependencies.
+See https://github.com/zip-rs/zip2 fur further information about `zip` dependencies.
 
 ### Extracting an archive to a directory
 
