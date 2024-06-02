@@ -1,7 +1,6 @@
 # zip-extensions-rs
 
 ![Rust](https://github.com/matzefriedrich/zip-extensions-rs/workflows/Rust/badge.svg)
-[![Build status](https://ci.appveyor.com/api/projects/status/41lavncr30iyv5rk/branch/master?svg=true)](https://ci.appveyor.com/project/matzefriedrich/zip-extensions-rs/branch/master)
 ![Crates.io](https://img.shields.io/crates/v/zip-extensions)
 
 
@@ -16,7 +15,7 @@ Add the following dependencies to the `Cargo.toml` file.
 ````toml
 [dependencies]
 zip = "2.1.1"
-zip-extensions = "2.7.0"
+zip-extensions = "0.8.0"
 ````
 
 See https://github.com/zip-rs/zip2 fur further information about `zip` dependencies.
@@ -72,7 +71,7 @@ use zip_extensions::write::ZipWriterExtensions;
 ...
 
 let file = File::create(archive_file)?;
-let mut zip = ZipWriter::new(file);
+let zip = ZipWriter::new(file);
 zip.create_from_directory(&source_path)?;
 ````
 
