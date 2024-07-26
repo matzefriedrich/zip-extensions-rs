@@ -15,4 +15,41 @@ exclude = [
 ]
 
 [dependencies]
-zip = "2.1.1"
+zip = { version = "2.1", default-features = false }
+
+[features]
+aes-crypto = ["zip/aes-crypto" ]
+chrono = ["zip/chrono"]
+deflate = ["zip/deflate"]
+deflate-flate2 = ["zip/deflate-flate2"]
+deflate-miniz = ["zip/deflate-miniz"]
+deflate-zlib = ["zip/deflate-zlib"]
+deflate-zlib-ng = ["zip/deflate-zlib-ng"]
+deflate-zopfli = ["zip/deflate-zopfli"]
+lzma = ["zip/lzma"]
+unreserved = ["zip/unreserved"]
+xz = ["zip/xz"]
+bzip2 = ["zip/bzip2"]
+deflate64 = ["zip/deflate64"]
+time = ["zip/time"]
+zstd = ["zip/zstd"]
+aes = ["zip/aes"]
+constant_time_eq = ["zip/constant_time_eq"]
+hmac = ["zip/hmac"]
+pbkdf2 = ["zip/pbkdf2"]
+sha1 = ["zip/sha1"]
+rand = ["zip/rand"]
+zeroize = ["zip/zeroize"]
+zopfli = ["zip/zopfli"]
+flate2 = ["zip/flate2"]
+lzma-rs = ["zip/lzma-rs"]
+default = [
+    "aes-crypto",
+    "bzip2",
+    "deflate64",
+    "deflate",
+    "lzma",
+    "time",
+    "zstd",
+    "xz",
+]
