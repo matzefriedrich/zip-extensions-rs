@@ -1,7 +1,9 @@
 # zip-extensions-rs
 
 ![Rust](https://github.com/matzefriedrich/zip-extensions-rs/workflows/Rust/badge.svg)
-![Crates.io](https://img.shields.io/crates/v/zip-extensions)
+![Crates.io Version](https://img.shields.io/crates/v/zip-extensions)
+![Crates.io Size](https://img.shields.io/crates/size/zip-extensions)
+![GitHub License](https://img.shields.io/github/license/matzefriedrich/zip-extensions-rs)
 
 
 An extension crate for https://github.com/zip-rs/zip2 that provides high-level functions for common ZIP tasks, such as extracting archives to a directory.
@@ -15,7 +17,7 @@ Add the following dependencies to the `Cargo.toml` file.
 ````toml
 [dependencies]
 zip = "2.1.1"
-zip-extensions = "0.8.0"
+zip-extensions = "0.8.1"
 ````
 
 See https://github.com/zip-rs/zip2 fur further information about `zip` dependencies.
