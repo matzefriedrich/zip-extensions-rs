@@ -107,7 +107,7 @@ impl<R: Read + io::Seek> ZipArchiveExtensions for ZipArchive<R> {
         }
 
         for file_number in 0..self.len() {
-            let mut next: ZipFile = self.by_index(file_number)?;
+            let mut next: ZipFile<R> = self.by_index(file_number)?;
             let sanitized_name = next.mangled_name();
             if next.is_dir() {
                 let extracted_folder_path = target_directory.join(sanitized_name);
@@ -144,7 +144,7 @@ impl<R: Read + io::Seek> ZipArchiveExtensions for ZipArchive<R> {
         file_number: usize,
         buffer: &mut Vec<u8>,
     ) -> ZipResult<()> {
-        let mut next: ZipFile = self.by_index(file_number)?;
+        let mut next: ZipFile<R> = self.by_index(file_number)?;
         if next.is_file() {
             let _bytes_read = next.read_to_end(buffer)?;
             return Ok(());
@@ -156,7 +156,7 @@ impl<R: Read + io::Seek> ZipArchiveExtensions for ZipArchive<R> {
     }
 
     fn entry_path(&mut self, file_number: usize) -> ZipResult<PathBuf> {
-        let next: ZipFile = self.by_index(file_number)?;
+        let next: ZipFile<R> = self.by_index(file_number)?;
         Ok(next.mangled_name())
     }
 
