@@ -1,6 +1,6 @@
 [package]
 name = "zip-extensions"
-version = "0.8.1"
+version = "0.8.2"
 authors = ["Matthias Friedrich <rushiblegit@gmail.com>"]
 edition = "2021"
 description = "An extension crate for zip."
@@ -15,7 +15,7 @@ exclude = [
 ]
 
 [dependencies]
-zip = { version = "2.1", default-features = false }
+zip = { version = "2.6", default-features = false }
 
 [features]
 aes-crypto = ["zip/aes-crypto" ]
@@ -38,7 +38,6 @@ constant_time_eq = ["zip/constant_time_eq"]
 hmac = ["zip/hmac"]
 pbkdf2 = ["zip/pbkdf2"]
 sha1 = ["zip/sha1"]
-rand = ["zip/rand"]
 zeroize = ["zip/zeroize"]
 zopfli = ["zip/zopfli"]
 flate2 = ["zip/flate2"]
