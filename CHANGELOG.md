@@ -5,11 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.3] - 2025-05-16
+
+Upgraded the `zip` crate from version `2.6` to `3.0` and updated related feature flags.
+
+### Changed
+
+- [PR #21] Removed obsolete features and added new ones such as `nt-time` and `jiff-02`. Adjusted the default features list accordingly. 
+
+
 ## [0.8.2] - 2025-04-22
 
 ### Changed
 
-- [PR #20] Updated zip crate dependency from version 2.1 to 2.6 and removed the no longer supported `rand` feature.
+- [PR #20] Updated zip crate dependency from version `2.1` to `2.6` and removed the no longer supported `rand` feature.
 - [PR #20] Replaced `ZipFile` with `ZipFile<R>` to fix missing generics.
 
 
@@ -36,14 +45,14 @@ The project follows the active development of the `zip` crate and has thus been 
 ### Changed
 
 - [PR #13] Adds support for per-item file options by the `create_from_directory_with_options` method. This introduces a breaking change; instead of passing a `FileOptions` directly an `Fn` must be specified that is called for each file, and must return a `FileOptions` value.
-- Upgraded the zip dependency to version 0.6.6.
+- Upgraded the zip dependency to version `0.6.6`.
 
 
 ## [0.6.2] - 2023-09-03
 
 ### Changed
 
-- [PR #10] Upgraded the zip dependency to version 0.6.2
+- [PR #10] Upgraded the zip dependency to version `0.6.2`
 
 
 ## [0.6.1] - 2021-07-30

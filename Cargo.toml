@@ -1,6 +1,6 @@
 [package]
 name = "zip-extensions"
-version = "0.8.2"
+version = "0.8.3"
 authors = ["Matthias Friedrich <rushiblegit@gmail.com>"]
 edition = "2021"
 description = "An extension crate for zip."
@@ -15,40 +15,23 @@ exclude = [
 ]
 
 [dependencies]
-zip = { version = "2.6", default-features = false }
+zip = { version = "3.0", default-features = false }
 
 [features]
 aes-crypto = ["zip/aes-crypto" ]
 chrono = ["zip/chrono"]
 deflate = ["zip/deflate"]
 deflate-flate2 = ["zip/deflate-flate2"]
-deflate-miniz = ["zip/deflate-miniz"]
-deflate-zlib = ["zip/deflate-zlib"]
-deflate-zlib-ng = ["zip/deflate-zlib-ng"]
+deflate-flate2-zlib = ["zip/deflate-flate2-zlib"]
+deflate-flate2-zlib-rs = ["zip/deflate-flate2-zlib-rs"]
 deflate-zopfli = ["zip/deflate-zopfli"]
+jiff-02 = ["zip/jiff-02"]
 lzma = ["zip/lzma"]
-unreserved = ["zip/unreserved"]
+nt-time = ["zip/nt-time"]
 xz = ["zip/xz"]
-bzip2 = ["zip/bzip2"]
-deflate64 = ["zip/deflate64"]
-time = ["zip/time"]
-zstd = ["zip/zstd"]
-aes = ["zip/aes"]
-constant_time_eq = ["zip/constant_time_eq"]
-hmac = ["zip/hmac"]
-pbkdf2 = ["zip/pbkdf2"]
-sha1 = ["zip/sha1"]
-zeroize = ["zip/zeroize"]
-zopfli = ["zip/zopfli"]
-flate2 = ["zip/flate2"]
-lzma-rs = ["zip/lzma-rs"]
 default = [
     "aes-crypto",
-    "bzip2",
-    "deflate64",
     "deflate",
     "lzma",
-    "time",
-    "zstd",
     "xz",
 ]
