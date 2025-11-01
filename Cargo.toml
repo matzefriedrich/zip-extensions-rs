@@ -1,6 +1,6 @@
 [package]
 name = "zip-extensions"
-version = "0.8.4"
+version = "0.8.5"
 authors = ["Matthias Friedrich <rushiblegit@gmail.com>"]
 edition = "2021"
 description = "An extension crate for zip."

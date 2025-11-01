@@ -1,7 +1,7 @@
-use std::fs::File;
 use std::io;
 use std::io::{Error, ErrorKind, Write};
 use std::path::{Component, PathBuf};
+use std::{fs::File, path::Path};
 
 /// Writes all bytes to a file.
 pub fn file_write_all_bytes(path: PathBuf, bytes: &[u8], overwrite: bool) -> io::Result<usize> {
@@ -17,7 +17,7 @@ pub fn file_write_all_bytes(path: PathBuf, bytes: &[u8], overwrite: bool) -> io:
 }
 
 /// Returns a relative path from one path to another.
-pub(crate) fn make_relative_path(root: &PathBuf, current: &PathBuf) -> PathBuf {
+pub fn make_relative_path(root: &Path, current: &Path) -> PathBuf {
     let mut result = PathBuf::new();
     let root_components = root.components().collect::<Vec<Component>>();
     let current_components = current.components().collect::<Vec<_>>();
@@ -29,21 +29,21 @@ pub(crate) fn make_relative_path(root: &PathBuf, current: &PathBuf) -> PathBuf {
                 break;
             }
         } else {
-            result.push(current_path_component)
+            result.push(current_path_component);
         }
     }
     result
 }
 
 // Returns a String representing the given Path.
-pub(crate) fn path_as_string(path: &std::path::Path) -> String {
+pub fn path_as_string(path: &Path) -> String {
     let mut path_str = String::new();
     for component in path.components() {
         if let Component::Normal(os_str) = component {
             if !path_str.is_empty() {
                 path_str.push('/');
             }
-            path_str.push_str(&*os_str.to_string_lossy());
+            path_str.push_str(&os_str.to_string_lossy());
         }
     }
     path_str
