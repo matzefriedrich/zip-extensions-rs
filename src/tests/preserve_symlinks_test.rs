@@ -34,8 +34,14 @@ mod tests {
 
         verify_regular_file_exists(&mut zip, source.expected_file_content);
 
-        let expected_symlink_entry_name = source.symlink_target_path.file_name().unwrap().to_str().unwrap();
-        let symlink = verify_symlink_is_stored_as_symlink_entry(&mut zip, expected_symlink_entry_name);
+        let expected_symlink_entry_name = source
+            .symlink_target_path
+            .file_name()
+            .unwrap()
+            .to_str()
+            .unwrap();
+        let symlink =
+            verify_symlink_is_stored_as_symlink_entry(&mut zip, expected_symlink_entry_name);
         verify_zip_entry_is_marked_as_symlink(symlink);
 
         #[cfg(unix)]
@@ -115,7 +121,10 @@ mod tests {
         }
     }
 
-    fn verify_symlink_is_stored_as_symlink_entry<'a>(zip: &'a mut ZipArchive<File>, name: &'a str) -> ZipFile<'a, File> {
+    fn verify_symlink_is_stored_as_symlink_entry<'a>(
+        zip: &'a mut ZipArchive<File>,
+        name: &'a str,
+    ) -> ZipFile<'a, File> {
         let symlink = zip.by_name(name).expect("symlink missing");
         symlink
     }

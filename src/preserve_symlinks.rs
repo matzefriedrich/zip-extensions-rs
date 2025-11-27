@@ -1,10 +1,10 @@
+use crate::preserve_symlinks_handler::PreserveSymlinksHandler;
+use crate::ZipWriterExtensions;
 use std::fs::File;
 use std::path::PathBuf;
 use zip::result::ZipResult;
 use zip::write::{FileOptionExtension, FileOptions};
 use zip::ZipWriter;
-use crate::preserve_symlinks_handler::PreserveSymlinksHandler;
-use crate::ZipWriterExtensions;
 
 /// Creates a ZIP archive from a directory while preserving symbolic links.
 ///
