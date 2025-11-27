@@ -25,8 +25,7 @@ impl<T: FileOptionExtension> EntryHandler<T> for DefaultEntryHandler {
         if metadata.is_file() {
             let mut f = File::open(&entry_path)?;
             f.read_to_end(buffer)?;
-            let relative_path = make_relative_path(&relative, &entry_path);
-            writer.start_file(path_as_string(&relative_path), file_options)?;
+            writer.start_file(path_as_string(&relative), file_options)?;
             writer.write_all(buffer.as_ref())?;
             buffer.clear();
         } else if metadata.is_dir() {
