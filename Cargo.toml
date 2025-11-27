@@ -16,11 +16,13 @@ exclude = [
 
 [dependencies]
 zip = { version = "3.0", default-features = false }
+
+[dev-dependencies]
 tempfile = "3.23.0"
 libc = "0.2.177"
 
 [features]
-aes-crypto = ["zip/aes-crypto" ]
+aes-crypto = ["zip/aes-crypto"]
 chrono = ["zip/chrono"]
 deflate = ["zip/deflate"]
 deflate-flate2 = ["zip/deflate-flate2"]
