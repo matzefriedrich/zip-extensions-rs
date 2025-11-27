@@ -3,7 +3,10 @@
 pub use crate::read::*;
 pub use crate::write::*;
 
+pub mod default_entry_handler;
+pub mod entry_handler;
 mod file_utils;
+pub mod preserver_symlinks_handler;
 pub mod read;
 pub mod write;
 

@@ -1,13 +1,14 @@
 use std::fs::File;
 use std::io;
-use std::io::{Read, Write};
+use std::io::Write;
 use std::path::PathBuf;
 
+use crate::default_entry_handler::DefaultEntryHandler;
+use crate::entry_handler::EntryHandler;
+use crate::preserver_symlinks_handler::PreserveSymlinksHandler;
 use zip::result::ZipResult;
 use zip::write::{FileOptionExtension, FileOptions, SimpleFileOptions};
 use zip::{CompressionMethod, ZipWriter};
-
-use crate::file_utils::{make_relative_path, path_as_string};
 
 /// Creates a zip archive that contains the files and directories from the specified directory.
 pub fn zip_create_from_directory(archive_file: &PathBuf, directory: &PathBuf) -> ZipResult<()> {
@@ -15,7 +16,7 @@ pub fn zip_create_from_directory(archive_file: &PathBuf, directory: &PathBuf) ->
     zip_create_from_directory_with_options(archive_file, directory, |_| options)
 }
 
-/// Creates a zip archive that contains the files and directories from the specified directory, uses the specified compression level.
+/// Creates a zip archive that contains the files and directories from the specified directory.
 pub fn zip_create_from_directory_with_options<F, T>(
     archive_file: &PathBuf,
     directory: &PathBuf,
@@ -30,7 +31,7 @@ where
     zip_writer.create_from_directory_with_options(directory, cb_file_options, &DefaultEntryHandler)
 }
 
-/// Creates a zip archive that contains the files and directories from the specified directory, uses the specified compression level.
+/// Creates a zip archive that contains the files and directories from the specified directory by preserving symlinks.
 pub fn zip_create_from_directory_preserve_symlinks_with_options<F, T>(
     archive_file: &PathBuf,
     directory: &PathBuf,
@@ -64,74 +65,6 @@ pub trait ZipWriterExtensions {
         T: FileOptionExtension,
         F: Fn(&PathBuf) -> FileOptions<T>,
         H: EntryHandler<T>;
-}
-
-pub trait EntryHandler<T: FileOptionExtension> {
-    fn handle_entry<W: Write + io::Seek>(
-        &self,
-        writer: &mut ZipWriter<W>,
-        root: &PathBuf,
-        entry_path: &PathBuf,
-        file_options: FileOptions<T>,
-        buffer: &mut Vec<u8>,
-    ) -> ZipResult<()>;
-}
-
-pub struct DefaultEntryHandler;
-
-impl<T: FileOptionExtension> EntryHandler<T> for DefaultEntryHandler {
-    fn handle_entry<W: Write + io::Seek>(
-        &self,
-        writer: &mut ZipWriter<W>,
-        root: &PathBuf,
-        entry_path: &PathBuf,
-        file_options: FileOptions<T>,
-        buffer: &mut Vec<u8>,
-    ) -> ZipResult<()> {
-        let metadata = std::fs::metadata(entry_path)?;
-        let relative = make_relative_path(root, entry_path);
-
-        if metadata.is_file() {
-            let mut f = File::open(&entry_path)?;
-            f.read_to_end(buffer)?;
-            let relative_path = make_relative_path(&relative, &entry_path);
-            writer.start_file(path_as_string(&relative_path), file_options)?;
-            writer.write_all(buffer.as_ref())?;
-            buffer.clear();
-        } else if metadata.is_dir() {
-            writer.add_directory(path_as_string(&relative), file_options)?;
-        }
-        Ok(())
-    }
-}
-
-pub struct PreserveSymlinksHandler;
-
-impl<T: FileOptionExtension> EntryHandler<T> for PreserveSymlinksHandler {
-    fn handle_entry<W: Write + io::Seek>(
-        &self,
-        writer: &mut ZipWriter<W>,
-        root: &PathBuf,
-        entry_path: &PathBuf,
-        file_options: FileOptions<T>,
-        buffer: &mut Vec<u8>,
-    ) -> ZipResult<()> {
-        let symlink_metadata = std::fs::symlink_metadata(entry_path)?;
-        let relative = make_relative_path(root, entry_path);
-
-        if symlink_metadata.is_symlink() {
-            let target = std::fs::read_link(entry_path)?;
-            writer.add_symlink(
-                relative.to_str().unwrap(),
-                target.to_str().unwrap(),
-                SimpleFileOptions::default(),
-            )?;
-            return Ok(());
-        }
-
-        // fallback to default behavior
-        DefaultEntryHandler.handle_entry(writer, root, entry_path, file_options, buffer)
-    }
 }
 
 impl<W: Write + io::Seek> ZipWriterExtensions for ZipWriter<W> {
