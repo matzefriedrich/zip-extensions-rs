@@ -16,6 +16,8 @@ exclude = [
 
 [dependencies]
 zip = { version = "3.0", default-features = false }
+tempfile = "3.23.0"
+libc = "0.2.177"
 
 [features]
 aes-crypto = ["zip/aes-crypto" ]
