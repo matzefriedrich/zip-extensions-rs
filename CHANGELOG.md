@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2025-11-27
+
+This release improves archive creation and adds symlink preservation. The core directory traversal logic does now accept pluggable handlers, enabling flexible behavior for different compression strategies. 
+
+### Changed
+
+* Introduces the `EntryHandler` trait that allows customization of how filesystem entries are processed during archive creation. The existing file-handling logic is refactored into the `DefaultEntryHandler`.
+
+* A new `PreserveSymlinksHandler` implementation detects symbolic links and writes them to the ZIP archive as symlinks rather than following their targets. **Use this feature with caution**; refer to the security notes added to the documentation of the newly added `zip_create_from_directory_preserve_symlinks_with_options` function.
+
+* The modules structure has been reorganized for clarity and maintainability.
+
+
 ## [0.8.3] - 2025-05-16
 
 Upgraded the `zip` crate from version `2.6` to `3.0` and updated related feature flags.
