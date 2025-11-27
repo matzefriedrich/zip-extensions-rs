@@ -5,7 +5,6 @@ use std::path::PathBuf;
 
 use crate::default_entry_handler::DefaultEntryHandler;
 use crate::entry_handler::EntryHandler;
-use crate::preserver_symlinks_handler::PreserveSymlinksHandler;
 use zip::result::ZipResult;
 use zip::write::{FileOptionExtension, FileOptions, SimpleFileOptions};
 use zip::{CompressionMethod, ZipWriter};
@@ -29,25 +28,6 @@ where
     let file = File::create(archive_file)?;
     let zip_writer = ZipWriter::new(file);
     zip_writer.create_from_directory_with_options(directory, cb_file_options, &DefaultEntryHandler)
-}
-
-/// Creates a zip archive that contains the files and directories from the specified directory by preserving symlinks.
-pub fn zip_create_from_directory_preserve_symlinks_with_options<F, T>(
-    archive_file: &PathBuf,
-    directory: &PathBuf,
-    cb_file_options: F,
-) -> ZipResult<()>
-where
-    T: FileOptionExtension,
-    F: Fn(&PathBuf) -> FileOptions<T>,
-{
-    let file = File::create(archive_file)?;
-    let zip_writer = ZipWriter::new(file);
-    zip_writer.create_from_directory_with_options(
-        directory,
-        cb_file_options,
-        &PreserveSymlinksHandler,
-    )
 }
 
 pub trait ZipWriterExtensions {
