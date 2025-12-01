@@ -3,9 +3,9 @@ use std::fs::File;
 use std::io;
 use std::io::{Error, ErrorKind, Read};
 use std::path::PathBuf;
+use zip::ZipArchive;
 use zip::read::ZipFile;
 use zip::result::{ZipError, ZipResult};
-use zip::ZipArchive;
 
 /// Extracts a ZIP file to the given directory.
 pub fn zip_extract(archive_file: &PathBuf, target_dir: &PathBuf) -> ZipResult<()> {
@@ -88,7 +88,7 @@ pub trait ZipArchiveExtensions {
 
     /// Extracts an entry in the ZIP archive to the given memory buffer.
     fn extract_file_to_memory(&mut self, file_number: usize, buffer: &mut Vec<u8>)
-        -> ZipResult<()>;
+    -> ZipResult<()>;
 
     /// Gets an entry´s path.
     fn entry_path(&mut self, file_number: usize) -> ZipResult<PathBuf>;

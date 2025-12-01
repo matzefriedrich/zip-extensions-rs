@@ -1,9 +1,9 @@
 use std::io;
 use std::io::Write;
 use std::path::PathBuf;
+use zip::ZipWriter;
 use zip::result::ZipResult;
 use zip::write::{FileOptionExtension, FileOptions};
-use zip::ZipWriter;
 
 pub trait EntryHandler<T: FileOptionExtension> {
     fn handle_entry<W: Write + io::Seek>(

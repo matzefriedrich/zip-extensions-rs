@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.10.0] - 2025-12-01
 
 * Bumps `zip` crate from version `3.0` to `6.0` [#27](https://github.com/matzefriedrich/zip-extensions-rs/pull/27)
+* Updates crate edition to 2024 [#28](https://github.com/matzefriedrich/zip-extensions-rs/pull/28)
 
 
 ## [0.9.1] - 2025-11-27
