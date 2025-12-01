@@ -4,9 +4,9 @@ use crate::file_utils::make_relative_path;
 use std::io;
 use std::io::Write;
 use std::path::PathBuf;
+use zip::ZipWriter;
 use zip::result::ZipResult;
 use zip::write::{FileOptionExtension, FileOptions};
-use zip::ZipWriter;
 
 pub struct PreserveSymlinksHandler;
 

@@ -4,10 +4,10 @@ mod tests {
     use std::fs::{self, File};
     use std::io::Read;
     use std::path::PathBuf;
-    use tempfile::{tempdir, TempDir};
+    use tempfile::{TempDir, tempdir};
+    use zip::CompressionMethod;
     use zip::read::{ZipArchive, ZipFile};
     use zip::write::SimpleFileOptions;
-    use zip::CompressionMethod;
 
     #[test]
     fn test_zip_preserves_symlinks() {
