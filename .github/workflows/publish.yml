@@ -1,0 +1,24 @@
+name: Publish Crate
+
+on:
+  push:
+    tags:
+      - "v*"
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Publish crate (dry-run)
+        id: dryrun
+        run: |
+          cargo publish --dry-run
+
+      - name: Publish crate
+        run: cargo publish --token ${{ secrets.CRATES_IO_CARGO_TOKEN }}
