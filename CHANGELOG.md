@@ -5,17 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.0] - 2025-12-01
+
+* Bumps `zip` crate from version `3.0` to `6.0` [#27](https://github.com/matzefriedrich/zip-extensions-rs/pull/27)
+
+
 ## [0.9.1] - 2025-11-27
 
 This release improves archive creation and adds symlink preservation. The core directory traversal logic does now accept pluggable handlers, enabling flexible behavior for different compression strategies. 
 
 ### Changed
 
-* Introduces the `EntryHandler` trait that allows customization of how filesystem entries are processed during archive creation. The existing file-handling logic is refactored into the `DefaultEntryHandler`.
+* Introduces the `EntryHandler` trait that allows customization of how filesystem entries are processed during archive creation. The existing file-handling logic is refactored into the `DefaultEntryHandler`. [#26](https://github.com/matzefriedrich/zip-extensions-rs/pull/26)
 
-* A new `PreserveSymlinksHandler` implementation detects symbolic links and writes them to the ZIP archive as symlinks rather than following their targets. **Use this feature with caution**; refer to the security notes added to the documentation of the newly added `zip_create_from_directory_preserve_symlinks_with_options` function.
+* A new `PreserveSymlinksHandler` implementation detects symbolic links and writes them to the ZIP archive as symlinks rather than following their targets. **Use this feature with caution**; refer to the security notes added to the documentation of the newly added `zip_create_from_directory_preserve_symlinks_with_options` function. [#26](https://github.com/matzefriedrich/zip-extensions-rs/pull/26)
 
-* The modules structure has been reorganized for clarity and maintainability.
+* The modules structure has been reorganized for clarity and maintainability. [#26](https://github.com/matzefriedrich/zip-extensions-rs/pull/26)
 
 
 ## [0.8.3] - 2025-05-16
@@ -24,15 +29,15 @@ Upgraded the `zip` crate from version `2.6` to `3.0` and updated related feature
 
 ### Changed
 
-- [PR #21] Removed obsolete features and added new ones such as `nt-time` and `jiff-02`. Adjusted the default features list accordingly. 
+- Removed obsolete features and added new ones such as `nt-time` and `jiff-02`. Adjusted the default features list accordingly. [#21](https://github.com/matzefriedrich/zip-extensions-rs/pull/21)
 
 
 ## [0.8.2] - 2025-04-22
 
 ### Changed
 
-- [PR #20] Updated zip crate dependency from version `2.1` to `2.6` and removed the no longer supported `rand` feature.
-- [PR #20] Replaced `ZipFile` with `ZipFile<R>` to fix missing generics.
+- Updated zip crate dependency from version `2.1` to `2.6` and removed the no longer supported `rand` feature. [#20](https://github.com/matzefriedrich/zip-extensions-rs/pull/20)
+- Replaced `ZipFile` with `ZipFile<R>` to fix missing generics. [#20](https://github.com/matzefriedrich/zip-extensions-rs/pull/20)
 
 
 ## [0.8.1] - 2024-07-26
@@ -57,7 +62,7 @@ The project follows the active development of the `zip` crate and has thus been 
 
 ### Changed
 
-- [PR #13] Adds support for per-item file options by the `create_from_directory_with_options` method. This introduces a breaking change; instead of passing a `FileOptions` directly an `Fn` must be specified that is called for each file, and must return a `FileOptions` value.
+- Adds support for per-item file options by the `create_from_directory_with_options` method. This introduces a breaking change; instead of passing a `FileOptions` directly an `Fn` must be specified that is called for each file, and must return a `FileOptions` value. [#13](https://github.com/matzefriedrich/zip-extensions-rs/pull/13)
 - Upgraded the zip dependency to version `0.6.6`.
 
 
@@ -65,29 +70,29 @@ The project follows the active development of the `zip` crate and has thus been 
 
 ### Changed
 
-- [PR #10] Upgraded the zip dependency to version `0.6.2`
+- Upgraded the zip dependency to version `0.6.2` [#10](https://github.com/matzefriedrich/zip-extensions-rs/pull/10)
 
 
 ## [0.6.1] - 2021-07-30
 
 ### Fixed
 
-- [PR #6] Fixes formatting and linter warnings
+- Fixes formatting and linter warnings [#6](https://github.com/matzefriedrich/zip-extensions-rs/pull/6)
 
 
 ## [0.6.0] - 2020-11-30
 
 ### Changed
 
-- [PR #4] Pass through Zip and IO errors (replaces all instances of `unwrap()`)
-- [PR #4] Adds tests; extends the `try_is_zip`  method so that it can detect different archive formats
+- Pass through Zip and IO errors (replaces all instances of `unwrap()`) [#4](https://github.com/matzefriedrich/zip-extensions-rs/pull/4)
+- [PR #4] Adds tests; extends the `try_is_zip`  method so that it can detect different archive formats [#4](https://github.com/matzefriedrich/zip-extensions-rs/pull/4)
 
 
 ## [0.5.0] - 2020-07-24
 
 ### Fixed
 
-- [PR #1] Fixes a bug in the `create_from_directory_with_options` method that could cause files not entirely written to disk; use `write_all` instead of `write`.
+- Fixes a bug in the `create_from_directory_with_options` method that could cause files not entirely written to disk; use `write_all` instead of `write`. [#1](https://github.com/matzefriedrich/zip-extensions-rs/pull/1)
 
 
 ## [0.4.0] - 2020-03-25
