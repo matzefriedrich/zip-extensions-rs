@@ -5,6 +5,7 @@ use std::path::PathBuf;
 
 use crate::default_entry_handler::DefaultEntryHandler;
 use crate::entry_handler::EntryHandler;
+use crate::inflate::zip_writer_extensions::ZipWriterExtensions;
 use zip::result::ZipResult;
 use zip::write::{FileOptionExtension, FileOptions, SimpleFileOptions};
 use zip::{CompressionMethod, ZipWriter};
@@ -28,23 +29,6 @@ where
     let file = File::create(archive_file)?;
     let zip_writer = ZipWriter::new(file);
     zip_writer.create_from_directory_with_options(directory, cb_file_options, &DefaultEntryHandler)
-}
-
-pub trait ZipWriterExtensions {
-    /// Creates a zip archive that contains the files and directories from the specified directory.
-    fn create_from_directory(self, directory: &PathBuf) -> ZipResult<()>;
-
-    /// Creates a zip archive that contains the files and directories from the specified directory, uses the specified compression level.
-    fn create_from_directory_with_options<F, T, H>(
-        self,
-        directory: &PathBuf,
-        cb_file_options: F,
-        handler: &H,
-    ) -> ZipResult<()>
-    where
-        T: FileOptionExtension,
-        F: Fn(&PathBuf) -> FileOptions<T>,
-        H: EntryHandler<T>;
 }
 
 impl<W: Write + io::Seek> ZipWriterExtensions for ZipWriter<W> {
