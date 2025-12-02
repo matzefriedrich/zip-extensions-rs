@@ -1,9 +1,9 @@
 #[cfg(test)]
 mod tests {
+    use crate::is_zip::is_zip;
     use std::fs::{self, File};
     use std::path::PathBuf;
     use std::str::FromStr;
-    use crate::is_zip::is_zip;
 
     #[test]
     fn is_zip_returns_false_if_file_does_not_exists() {
