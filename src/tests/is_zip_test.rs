@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use crate::is_zip;
+    use crate::deflate::is_zip::is_zip;
     use std::fs::{self, File};
     use std::path::PathBuf;
     use std::str::FromStr;
