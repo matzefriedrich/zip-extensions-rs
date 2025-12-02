@@ -6,7 +6,7 @@
 ![GitHub License](https://img.shields.io/github/license/matzefriedrich/zip-extensions-rs)
 
 
-An extension crate for https://github.com/zip-rs/zip2 that provides high-level functions for common ZIP tasks, such as extracting archives to a directory.
+A companion crate to https://github.com/zip-rs/zip2 that offers high‑level utilities for everyday ZIP tasks—such as extracting archives to a directory, creating archives from folders, and supporting .zipignore and symlink preservation.
 
 ## Usage examples
 
@@ -17,10 +17,11 @@ Add the following dependencies to the `Cargo.toml` file.
 ````toml
 [dependencies]
 zip = "6.0"
-zip-extensions = "0.10.0"
+zip-extensions = "0.11.0"
 ````
 
 See https://github.com/zip-rs/zip2 fur further information about `zip` dependencies.
+
 
 ### Extracting an archive to a directory
 
@@ -46,6 +47,7 @@ let target_dir: PathBuf = ...
 zip_extract(&archive_file, &target_dir)?;
 ```` 
 
+
 ### Extracting an archive entry into memory
 
 The `zip_extract_file_to_memory` method can be used to extract entries ad-hoc into memory.
@@ -63,13 +65,14 @@ match zip_extract_file_to_memory(&archive_file, &entry_path, &mut buffer) {
 };
 ````
 
+
 ### Creating an archive from a directory
 
 The `ZipWriterExtensions` trait provides the `create_from_directory` and `create_from_directory_with_options` methods that can be used to add an entire directory hierarchy to an archive.
 
 ````rust
 use zip::ZipWriter;
-use zip_extensions::write::ZipWriterExtensions;
+use zip_extensions::zip_writer_extensions::ZipWriterExtensions;
 ...
 
 let file = File::create(archive_file)?;
@@ -82,7 +85,51 @@ Alternatively, the `zip_create_from_directory` helper can be used.
 ````rust
 use zip_extensions::*;
 ...
+
 let archive_file: PathBuf = ...
 let source_dir: PathBuf = ...
 zip_create_from_directory(&archive_file, &source_dir)?;
 ````
+
+
+### Creating an archive from a directory with preserved symlinks
+
+Use `create_from_directory_with_options` together with the symlink-preserving helper if you want symbolic links to be stored as links instead of being resolved to their targets. This preserves the link metadata inside the ZIP.
+
+````rust
+use zip_extensions::preserve_symlinks::zip_create_from_directory_preserve_symlinks_with_options;
+...
+let archive_file: PathBuf = ...
+let source_dir: PathBuf = ...
+let opts = SimpleFileOptions::default().compression_method(CompressionMethod::Stored);
+zip_create_from_directory_preserve_symlinks_with_options(
+    &archive_file,
+    &source_dir,
+    |_p| opts,
+)?;
+````
+
+**Note:** Preserving symlinks can be unsafe when the ZIP will be extracted by unknown tools that do not validate symlink targets. Prefer the non-preserving variant for general distribution.
+
+
+### Creating an archive from a directory while respecting .zipignore files
+
+To exclude files and folders based on `.zipignore` rules, pass the `ZipIgnoreEntryHandler` together with `create_from_directory_with_options` on a `ZipWriter`.
+
+````rust
+use zip::ZipWriter;
+use zip_extensions::zip_ignore_entry_handler::ZipIgnoreEntryHandler;
+use zip_extensions::zip_writer_extensions::ZipWriterExtensions;
+...
+
+let source_dir: PathBuf = ...
+let zip_writer = ZipWriter::new(...);
+let opts = SimpleFileOptions::default().compression_method(CompressionMethod::Stored);
+zip_writer.create_from_directory_with_options(
+    &source_dir,
+    |_p: &PathBuf| opts,
+    &ZipIgnoreEntryHandler::new(),
+)?;
+````
+
+Place a `.zipignore` file in any directory you want to influence.
