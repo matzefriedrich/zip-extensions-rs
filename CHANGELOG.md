@@ -5,12 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [0.11.0] - 2025-12-03
+
+### Added
+
+* Adds the `ZipIgnoreEntryHandler` to handle `.zipignore` rules for file exclusions [#30](https://github.com/matzefriedrich/zip-extensions-rs/pull/30)
 
 ### Changed
 
 * Refactored the project structure by grouping functionality into deflate, inflate, and utilities modules. [#29](https://github.com/matzefriedrich/zip-extensions-rs/pull/29)
-* Adds the `ZipIgnoreEntryHandler` to handle `.zipignore` rules for file exclusions [#30](https://github.com/matzefriedrich/zip-extensions-rs/pull/30)
 * Refactors `ZipIgnoreEntryHandler` and `PreserveSymlinksHandler` to support customizable inner handlers [#31](https://github.com/matzefriedrich/zip-extensions-rs/pull/31)
 
 
