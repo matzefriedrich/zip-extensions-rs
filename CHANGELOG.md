@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Refactored the project structure by grouping functionality into deflate, inflate, and utilities modules. [#29](https://github.com/matzefriedrich/zip-extensions-rs/pull/29)
 * Adds the `ZipIgnoreEntryHandler` to handle `.zipignore` rules for file exclusions [#30](https://github.com/matzefriedrich/zip-extensions-rs/pull/30)
+* Refactors `ZipIgnoreEntryHandler` and `PreserveSymlinksHandler` to support customizable inner handlers [#31](https://github.com/matzefriedrich/zip-extensions-rs/pull/31)
 
 
 ## [0.10.0] - 2025-12-01
