@@ -12,7 +12,8 @@ exclude = [
     "**/*.json",
     "**/*.yml",
     ".gitignore",
-    "tests/*"
+    "bin/*",
+    "tests/*",
 ]
 
 [dependencies]
@@ -44,5 +45,10 @@ default = [
     "xz",
 ]
 
-# Enable JSON output for audit reports
 audit-json = ["serde", "serde_json"]
+zip-audit = ["audit-json"]
+
+[[bin]]
+name = "zip-audit"
+path = "src/bin/audit/main.rs"
+required-features = ["zip-audit"]
