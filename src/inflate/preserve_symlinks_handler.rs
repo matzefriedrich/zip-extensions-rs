@@ -8,9 +8,38 @@ use zip::ZipWriter;
 use zip::result::ZipResult;
 use zip::write::{FileOptionExtension, FileOptions};
 
-pub struct PreserveSymlinksHandler;
+/// An `EntryHandler` wrapper that preserves symlinks when zipping.
+///
+/// If the current entry is a symbolic link, it writes a symlink entry to the ZIP. Otherwise, it
+/// delegates to the wrapped `inner` handler. By default, the inner handler
+/// is `DefaultEntryHandler`, but you can compose multiple behaviors by wrapping another handler
+/// instead.
+pub struct PreserveSymlinksHandler<H = DefaultEntryHandler> {
+    inner: H,
+}
 
-impl<T: FileOptionExtension> EntryHandler<T> for PreserveSymlinksHandler {
+impl PreserveSymlinksHandler<DefaultEntryHandler> {
+    pub fn new() -> Self {
+        Self {
+            inner: DefaultEntryHandler,
+        }
+    }
+
+    pub fn with_default_inner() -> Self {
+        Self::new()
+    }
+}
+
+impl<H> PreserveSymlinksHandler<H> {
+    pub fn with_inner(inner: H) -> Self {
+        Self { inner }
+    }
+}
+
+impl<T: FileOptionExtension, H> EntryHandler<T> for PreserveSymlinksHandler<H>
+where
+    H: EntryHandler<T>,
+{
     fn handle_entry<W: Write + io::Seek>(
         &self,
         writer: &mut ZipWriter<W>,
@@ -32,7 +61,7 @@ impl<T: FileOptionExtension> EntryHandler<T> for PreserveSymlinksHandler {
             return Ok(());
         }
 
-        // fallback to default behavior
-        DefaultEntryHandler.handle_entry(writer, root, entry_path, file_options, buffer)
+        self.inner
+            .handle_entry(writer, root, entry_path, file_options, buffer)
     }
 }

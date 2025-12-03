@@ -10,20 +10,33 @@ use zip::ZipWriter;
 use zip::result::ZipResult;
 use zip::write::{FileOptionExtension, FileOptions};
 
-/// An EntryHandler that honors `.zipignore` files similar to how `.gitignore` works.
+/// An EntryHandler wrapper that honors `.zipignore` files similar to how `.gitignore` works.
 /// Patterns from `.zipignore` files are merged from the root directory down to deeper levels.
-pub struct ZipIgnoreEntryHandler {
+/// If a path is not ignored, delegation continues to the wrapped `inner` handler.
+pub struct ZipIgnoreEntryHandler<H = DefaultEntryHandler> {
     per_directory_matcher_cache: Mutex<HashMap<PathBuf, Gitignore>>,
     ignore_filename: &'static str,
+    inner: H,
 }
 
 pub(crate) const IGNORE_FILENAME: &str = ".zipignore";
 
-impl ZipIgnoreEntryHandler {
+impl ZipIgnoreEntryHandler<DefaultEntryHandler> {
     pub fn new() -> Self {
         Self {
             per_directory_matcher_cache: Mutex::new(HashMap::new()),
             ignore_filename: IGNORE_FILENAME,
+            inner: DefaultEntryHandler,
+        }
+    }
+}
+
+impl<H> ZipIgnoreEntryHandler<H> {
+    pub fn with_inner(inner: H) -> Self {
+        Self {
+            per_directory_matcher_cache: Mutex::new(HashMap::new()),
+            ignore_filename: IGNORE_FILENAME,
+            inner,
         }
     }
 
@@ -87,13 +100,10 @@ impl ZipIgnoreEntryHandler {
     }
 }
 
-impl Default for ZipIgnoreEntryHandler {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-impl<T: FileOptionExtension> EntryHandler<T> for ZipIgnoreEntryHandler {
+impl<T: FileOptionExtension, H> EntryHandler<T> for ZipIgnoreEntryHandler<H>
+where
+    H: EntryHandler<T>,
+{
     fn handle_entry<W: Write + io::Seek>(
         &self,
         writer: &mut ZipWriter<W>,
@@ -107,6 +117,7 @@ impl<T: FileOptionExtension> EntryHandler<T> for ZipIgnoreEntryHandler {
         if self.is_ignored(root.as_path(), entry_path.as_path(), is_dir) {
             return Ok(());
         }
-        DefaultEntryHandler.handle_entry(writer, root, entry_path, file_options, buffer)
+        self.inner
+            .handle_entry(writer, root, entry_path, file_options, buffer)
     }
 }
