@@ -51,6 +51,6 @@ where
     zip_writer.create_from_directory_with_options(
         directory,
         cb_file_options,
-        &PreserveSymlinksHandler,
+        &PreserveSymlinksHandler::new(),
     )
 }
