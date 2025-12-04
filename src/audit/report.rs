@@ -5,6 +5,7 @@ use std::path::PathBuf;
 pub struct ZipAuditReport {
     pub avg_ratio: f64,
     pub duplicate_names: Vec<PathBuf>,
+    pub encrypted_entries: Vec<PathBuf>,
     pub entry_count: u64,
     pub has_absolute_paths: bool,
     pub has_encrypted_entries: bool,
@@ -45,6 +46,7 @@ impl ZipAuditReport {
             avg_ratio: 0.0,
             duplicate_names: Vec::new(),
             entry_count: 0,
+            encrypted_entries: Vec::new(),
             has_absolute_paths: false,
             has_encrypted_entries: false,
             has_parent_components: false,
@@ -58,5 +60,14 @@ impl ZipAuditReport {
             total_uncompressed: 0,
             truncated_or_mismatch: false,
         }
+    }
+
+    pub fn trace_duplicate(&mut self, name: PathBuf) {
+        self.duplicate_names.push(name);
+    }
+
+    pub fn trace_encrypted(&mut self, name: PathBuf) {
+        self.encrypted_entries.push(name);
+        self.has_encrypted_entries = true;
     }
 }

@@ -9,7 +9,7 @@ pub struct EncryptionHandler;
 impl EntryAuditHandler for EncryptionHandler {
     fn visit(&mut self, view: &EntryView, report: &mut ZipAuditReport) {
         if view.encrypted {
-            report.has_encrypted_entries = true;
+            report.trace_encrypted(view.enclosed_name.clone());
         }
     }
 }
