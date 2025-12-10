@@ -4,8 +4,8 @@ use std::io::Write;
 use std::path::PathBuf;
 
 use crate::default_entry_handler::DefaultEntryHandler;
+use crate::deflate::zip_writer_extensions::ZipWriterExtensions;
 use crate::entry_handler::EntryHandler;
-use crate::inflate::zip_writer_extensions::ZipWriterExtensions;
 use zip::result::ZipResult;
 use zip::write::{FileOptionExtension, FileOptions, SimpleFileOptions};
 use zip::{CompressionMethod, ZipWriter};

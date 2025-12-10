@@ -1,5 +1,5 @@
-use crate::deflate::zip_archive_extensions::ZipArchiveExtensions;
 use crate::file_utils::file_write_all_bytes;
+use crate::inflate::zip_archive_extensions::ZipArchiveExtensions;
 use std::io;
 use std::io::{Error, ErrorKind, Read};
 use std::path::PathBuf;

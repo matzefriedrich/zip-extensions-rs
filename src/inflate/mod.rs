@@ -1,7 +1,4 @@
-pub mod default_entry_handler;
-pub mod entry_handler;
-pub mod preserve_symlinks;
-pub mod preserve_symlinks_handler;
-pub mod zip_ignore_entry_handler;
-pub mod zip_writer;
-pub mod zip_writer_extensions;
+pub mod is_zip;
+pub mod zip_archive;
+pub mod zip_archive_extensions;
+pub mod zip_extract;

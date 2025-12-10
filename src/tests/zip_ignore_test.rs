@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
-    use crate::inflate::zip_ignore_entry_handler::ZipIgnoreEntryHandler;
-    use crate::inflate::zip_writer_extensions::ZipWriterExtensions;
+    use crate::deflate::zip_ignore_entry_handler::ZipIgnoreEntryHandler;
+    use crate::deflate::zip_writer_extensions::ZipWriterExtensions;
     use crate::zip_ignore_entry_handler::IGNORE_FILENAME;
     use std::fs;
     use std::fs::File;

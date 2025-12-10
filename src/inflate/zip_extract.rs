@@ -1,4 +1,4 @@
-use crate::deflate::zip_archive_extensions::ZipArchiveExtensions;
+use crate::inflate::zip_archive_extensions::ZipArchiveExtensions;
 use std::fs::File;
 use std::path::PathBuf;
 use zip::ZipArchive;
