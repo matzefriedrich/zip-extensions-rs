@@ -2,7 +2,6 @@ use std::fs::File;
 use std::io;
 use std::io::Write;
 use std::path::PathBuf;
-
 use crate::default_entry_handler::DefaultEntryHandler;
 use crate::deflate::zip_writer_extensions::ZipWriterExtensions;
 use crate::entry_handler::EntryHandler;
@@ -27,18 +26,20 @@ where
     F: Fn(&PathBuf) -> FileOptions<T>,
 {
     let file = File::create(archive_file)?;
-    let zip_writer = ZipWriter::new(file);
-    zip_writer.create_from_directory_with_options(directory, cb_file_options, &DefaultEntryHandler)
+    let mut zip_writer = ZipWriter::new(file);
+    zip_writer.create_from_directory_with_options(directory, cb_file_options, &DefaultEntryHandler)?;
+    zip_writer.finish()?;
+    Ok(())
 }
 
 impl<W: Write + io::Seek> ZipWriterExtensions for ZipWriter<W> {
-    fn create_from_directory(self, directory: &PathBuf) -> ZipResult<()> {
+    fn create_from_directory(&mut self, directory: &PathBuf) -> ZipResult<()> {
         let options = SimpleFileOptions::default().compression_method(CompressionMethod::Stored);
         self.create_from_directory_with_options(directory, |_| options, &DefaultEntryHandler)
     }
 
     fn create_from_directory_with_options<F, T, H>(
-        mut self,
+        &mut self,
         directory: &PathBuf,
         cb_file_options: F,
         handler: &H,
@@ -59,7 +60,7 @@ impl<W: Write + io::Seek> ZipWriterExtensions for ZipWriter<W> {
                 let entry_path = entry?.path();
                 let file_options = cb_file_options(&entry_path);
                 handler.handle_entry(
-                    &mut self,
+                    self,
                     &directory,
                     &entry_path,
                     file_options,
@@ -72,7 +73,6 @@ impl<W: Write + io::Seek> ZipWriterExtensions for ZipWriter<W> {
             }
         }
 
-        self.finish()?;
         Ok(())
     }
 }
