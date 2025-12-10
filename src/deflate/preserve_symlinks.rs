@@ -47,10 +47,12 @@ where
     F: Fn(&PathBuf) -> FileOptions<T>,
 {
     let file = File::create(archive_file)?;
-    let zip_writer = ZipWriter::new(file);
+    let mut zip_writer = ZipWriter::new(file);
     zip_writer.create_from_directory_with_options(
         directory,
         cb_file_options,
         &PreserveSymlinksHandler::new(),
-    )
+    )?;
+    zip_writer.finish()?;
+    Ok(())
 }

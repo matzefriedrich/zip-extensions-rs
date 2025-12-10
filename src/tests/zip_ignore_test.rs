@@ -99,7 +99,7 @@ mod tests {
 
         fn create_archive(&self) {
             let file = File::create(&self.archive_path).unwrap();
-            let zip_writer = ZipWriter::new(file);
+            let mut zip_writer = ZipWriter::new(file);
             let options =
                 SimpleFileOptions::default().compression_method(CompressionMethod::Stored);
             zip_writer
@@ -109,6 +109,7 @@ mod tests {
                     &ZipIgnoreEntryHandler::new(),
                 )
                 .expect("Failed to create archive");
+            zip_writer.finish().unwrap();
         }
     }
 

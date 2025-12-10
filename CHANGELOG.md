@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.13.0] - 2025-12-11
+
+### Changed
+
+* Added support to call `ZipWriterExtensions` methods on `&mut ZipWriter` by changing receivers to `&mut self`. [#34](https://github.com/matzefriedrich/zip-extensions-rs/pull/34)
+
+* **Breaking change:** Extension methods no longer consume `ZipWriter` and do not call `finish()` internally; callers must explicitly invoke `finish()` after use. For top-level convenience functions, the behavior is unchanged. [#34](https://github.com/matzefriedrich/zip-extensions-rs/pull/34)
+
+
 ## [0.12.0] - 2025-12-10
 
 ### Fixed
