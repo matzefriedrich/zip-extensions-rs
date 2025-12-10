@@ -1,4 +1,4 @@
-use crate::inflate::zip_writer_extensions::ZipWriterExtensions;
+use crate::deflate::zip_writer_extensions::ZipWriterExtensions;
 use crate::preserve_symlinks_handler::PreserveSymlinksHandler;
 #[allow(unused_imports)]
 use crate::zip_writer::zip_create_from_directory_with_options;
@@ -13,7 +13,7 @@ use zip::write::{FileOptionExtension, FileOptions};
 /// ### Security Warning
 ///
 /// Preserving symlinks inside ZIP archives can introduce security risks
-/// for consumers who deflate the archive using tools or libraries that
+/// for consumers who inflate the archive using tools or libraries that
 /// do **not** validate paths or symlink targets.
 ///
 /// Malicious archives may embed symlinks whose resolved target points
