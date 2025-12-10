@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.0] - 2025-12-10
+
+### Fixed
+
+* :see_no_evil: Fixes interchanged modules names (inflate vs deflate) [#33](https://github.com/matzefriedrich/zip-extensions-rs/pull/33)
+
+
 ## [0.11.0] - 2025-12-03
 
 ### Added
