@@ -18,7 +18,7 @@ impl<R: Read + io::Seek> ZipArchiveExtensions for ZipArchive<R> {
 
         for file_number in 0..self.len() {
             let mut next: ZipFile<R> = self.by_index(file_number)?;
-            let sanitized_name = next.mangled_name();
+            let sanitized_name = next.enclosed_name().unwrap();
             if next.is_dir() {
                 let extracted_folder_path = target_directory.join(sanitized_name);
                 std::fs::create_dir_all(extracted_folder_path)?;
