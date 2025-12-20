@@ -31,12 +31,40 @@ pub struct SuspiciousEntry {
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "audit-json", derive(serde::Serialize))]
 pub enum SuspiciousReason {
+    /// The entry appears to be highly compressible (or malformed): its
+    /// uncompressed size is disproportionately larger than its compressed size.
+    /// This pattern is often seen in zip bombs that expand massively upon
+    /// extraction.
+    ///
+    /// `compressed`: size in bytes stored in the archive
+    /// `uncompressed`: expected size in bytes after extraction
     HugeRatio { compressed: u64, uncompressed: u64 },
+
+    /// The path length of the entry exceeds a reasonable limit and may cause
+    /// issues on some file systems or be used to obfuscate malicious content.
     ExtremelyLongPath,
+
+    /// The entry name is not valid UTF‑8. This can cause tooling problems and
+    /// may be used to hide files or confuse reviewers.
     InvalidUtf8,
+
+    /// The entry name contains control characters (non‑printable ASCII), which
+    /// can hide parts of the name in terminals and UIs and is commonly used for
+    /// obfuscation.
     ControlCharsInName,
+
+    /// The entry name matches a Windows reserved device name (e.g., `CON`,
+    /// `PRN`, `AUX`, `NUL`, `COM1`, `LPT1`, etc.). Such names can fail to
+    /// extract or behave unexpectedly on Windows systems.
     WindowsReservedName,
+
+    /// The compressed size is zero (or near zero) while the uncompressed size
+    /// is large. This may indicate a zip bomb payload or a malformed header.
     ZeroCompressedButLarge,
+
+    /// The file headers indicate inconsistent or truncated metadata (e.g.,
+    /// central directory vs. local header mismatch). Extraction may fail or
+    /// produce corrupted output.
     HeaderMismatch,
 }
 
