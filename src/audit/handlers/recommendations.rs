@@ -1,4 +1,4 @@
-use crate::audit::report::ZipAuditReport;
+use crate::audit::report::{MAX_SUSPICIOUS_RATIO, ZipAuditReport};
 use crate::entry_audit_handler::EntryAuditHandler;
 use crate::entry_view::EntryView;
 
@@ -15,7 +15,7 @@ impl EntryAuditHandler for RecommendationsHandler {
                 .recommendations
                 .push("Reject ZIPs containing absolute paths.".to_string());
         }
-        if report.max_ratio > 1000.0 {
+        if report.max_ratio > MAX_SUSPICIOUS_RATIO {
             report
                 .recommendations
                 .push("Limit max compression ratio (500 recommended).".to_string());

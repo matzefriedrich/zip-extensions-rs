@@ -7,13 +7,13 @@ use std::path::Path;
 use zip::result::ZipResult;
 
 /// Produce a fast, side-effect-free risk assessment of a ZIP archive from a file path.
-pub fn zip_audit<P: AsRef<Path>>(archive: P) -> ZipResult<ZipAuditReport> {
+pub fn zip_audit_file<P: AsRef<Path>>(archive: P) -> ZipResult<ZipAuditReport> {
     let file = File::open(archive)?;
-    zip_audit_reader(file)
+    zip_audit(file)
 }
 
 /// Reader-based audit API. Does not extract or write anything.
-pub fn zip_audit_reader<R: Read + Seek>(reader: R) -> ZipResult<ZipAuditReport> {
+pub fn zip_audit<R: Read + Seek>(reader: R) -> ZipResult<ZipAuditReport> {
     scan::scan_zip(reader)
 }
 
@@ -21,7 +21,7 @@ pub fn zip_audit_reader<R: Read + Seek>(reader: R) -> ZipResult<ZipAuditReport> 
 ///
 /// This enables advanced users to inject their own stateful analysis handlers or
 /// replace the defaults while reusing the same scanning loop.
-pub fn zip_audit_reader_with_handlers<R: Read + Seek>(
+pub fn zip_audit_with_handlers<R: Read + Seek>(
     reader: R,
     handlers: Vec<Box<dyn EntryAuditHandler>>,
 ) -> ZipResult<ZipAuditReport> {
@@ -31,6 +31,6 @@ pub fn zip_audit_reader_with_handlers<R: Read + Seek>(
 #[cfg(feature = "audit-json")]
 /// Convenience function returning a JSON representation of the audit report.
 pub fn zip_audit_json<P: AsRef<Path>>(archive: P) -> ZipResult<serde_json::Value> {
-    let report = zip_audit(archive)?;
+    let report = zip_audit_file(archive)?;
     Ok(serde_json::to_value(&report).expect("serialization should not fail"))
 }

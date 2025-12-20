@@ -1,5 +1,9 @@
 use std::path::PathBuf;
 
+/// Threshold used to flag entries with an excessively large compression ratio.
+/// Values above this are commonly associated with zip-bomb style payloads.
+pub const MAX_SUSPICIOUS_RATIO: f64 = 1000.0;
+
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "audit-json", derive(serde::Serialize))]
 pub struct ZipAuditReport {

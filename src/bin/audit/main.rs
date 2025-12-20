@@ -1,7 +1,7 @@
 use std::env;
 use std::path::Path;
 use std::process;
-use zip_extensions::audit::zip_audit_reader::zip_audit;
+use zip_extensions::audit::zip_audit_reader::zip_audit_file;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -19,7 +19,7 @@ fn main() {
         process::exit(1);
     }
 
-    match zip_audit(path) {
+    match zip_audit_file(path) {
         Ok(report) => {
             serde_json::to_writer_pretty(std::io::stdout(), &report).unwrap();
             // println!("{:#?}", report);

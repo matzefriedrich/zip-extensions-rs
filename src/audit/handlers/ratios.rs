@@ -1,4 +1,6 @@
-use crate::audit::report::{SuspiciousEntry, SuspiciousReason, ZipAuditReport};
+use crate::audit::report::{
+    MAX_SUSPICIOUS_RATIO, SuspiciousEntry, SuspiciousReason, ZipAuditReport,
+};
 use crate::entry_audit_handler::EntryAuditHandler;
 use crate::entry_view::EntryView;
 
@@ -23,7 +25,7 @@ impl EntryAuditHandler for RatiosHandler {
             report.max_ratio = view.ratio;
         }
 
-        if view.ratio > 1000.0 {
+        if view.ratio > MAX_SUSPICIOUS_RATIO {
             report.suspicious_entries.push(SuspiciousEntry {
                 name: view.enclosed_name.clone(),
                 reason: SuspiciousReason::HugeRatio {

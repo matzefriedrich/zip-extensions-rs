@@ -1,43 +1,18 @@
+use crate::audit::utils::{
+    absolute_path_checker, path_depth_analyzer, windows_reserved_name_checker,
+};
 use std::path::PathBuf;
 
 pub fn is_absolute_path_bytes(name: &[u8]) -> bool {
-    if name.is_empty() {
-        return false;
-    }
-    if name[0] == b'/' || name[0] == b'\\' {
-        return true;
-    }
-    if name.len() >= 3 && name[1] == b':' && (name[2] == b'/' || name[2] == b'\\') {
-        let c = name[0];
-        if (b'A'..=b'Z').contains(&c) || (b'a'..=b'z').contains(&c) {
-            return true;
-        }
-    }
-    if name.len() >= 2 && name[0] == b'\\' && name[1] == b'\\' {
-        return true;
-    }
-    false
+    absolute_path_checker::is_absolute_path_bytes(name)
 }
 
 pub fn has_parent_components_bytes(name: &[u8]) -> bool {
-    name.windows(3).any(|w| w == b"../") || name.windows(3).any(|w| w == b"..\\")
+    absolute_path_checker::has_parent_components_bytes(name)
 }
 
 pub fn depth_hint_bytes(name: &[u8]) -> usize {
-    let mut depth = 0usize;
-    let mut start = 0usize;
-    for (i, b) in name.iter().enumerate() {
-        if *b == b'/' || *b == b'\\' {
-            if i > start {
-                depth += 1;
-            }
-            start = i + 1;
-        }
-    }
-    if name.len() > start {
-        depth += 1;
-    }
-    depth
+    path_depth_analyzer::count_path_components_bytes(name)
 }
 
 pub fn compression_ratio(c: u64, u: u64) -> f64 {
@@ -56,16 +31,7 @@ pub fn contains_control_chars(name: &[u8]) -> bool {
 }
 
 pub fn is_windows_reserved_name(path: &PathBuf) -> bool {
-    if let Some(os) = path.file_name() {
-        if let Some(stem) = os.to_str() {
-            let s = stem.trim_matches('.').to_ascii_uppercase();
-            const RESERVED: [&str; 9] = [
-                "CON", "AUX", "PRN", "NUL", "COM1", "COM2", "COM3", "LPT1", "LPT2",
-            ];
-            return RESERVED.contains(&s.as_str());
-        }
-    }
-    false
+    windows_reserved_name_checker::is_windows_reserved_name(path)
 }
 
 pub fn is_symlink_unix_mode(unix_mode: Option<u32>) -> bool {
