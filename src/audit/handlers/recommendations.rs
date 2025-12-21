@@ -1,6 +1,6 @@
+use crate::audit::entry_audit_handler::EntryAuditHandler;
+use crate::audit::entry_view::EntryView;
 use crate::audit::report::{MAX_SUSPICIOUS_RATIO, ZipAuditReport};
-use crate::entry_audit_handler::EntryAuditHandler;
-use crate::entry_view::EntryView;
 
 /// A `RecommendationsHandler` is used to provide actionable guidance to configure safe extraction.
 /// This is a report finalization handler that generates human-readable recommendations based

@@ -1,8 +1,8 @@
 use std::path::PathBuf;
 
+use crate::audit::entry_audit_handler::EntryAuditHandler;
+use crate::audit::entry_view::EntryView;
 use crate::audit::report::{SuspiciousEntry, SuspiciousReason, ZipAuditReport};
-use crate::entry_audit_handler::EntryAuditHandler;
-use crate::entry_view::EntryView;
 
 /// A `PathHandler` is used to track and report on suspicious paths, and signal safe extraction
 /// policies. For instance, the handler detects absolute paths and parent components in entry names,

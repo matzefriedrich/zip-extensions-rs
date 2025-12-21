@@ -1,7 +1,7 @@
 use super::util;
+use crate::audit::entry_audit_handler::EntryAuditHandler;
+use crate::audit::entry_view::EntryView;
 use crate::audit::report::ZipAuditReport;
-use crate::entry_audit_handler::EntryAuditHandler;
-use crate::entry_view::EntryView;
 
 /// A `SymlinksHandler` is used to detect POSIX-style symlink entries and optionally count those
 /// that point outside a safe extraction root. Since symlinks can redirect extraction to unexpected

@@ -1,7 +1,7 @@
 use std::env;
 use std::path::Path;
 use std::process;
-use zip_extensions::audit::zip_audit_reader::zip_audit_file;
+use zip_extensions::eap::audit::zip_audit_reader::zip_audit_file;
 
 fn main() {
     let args: Vec<String> = env::args().collect();

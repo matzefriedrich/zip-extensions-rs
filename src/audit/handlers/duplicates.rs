@@ -1,9 +1,9 @@
 use std::collections::HashSet;
 use std::path::PathBuf;
 
+use crate::audit::entry_audit_handler::EntryAuditHandler;
+use crate::audit::entry_view::EntryView;
 use crate::audit::report::ZipAuditReport;
-use crate::entry_audit_handler::EntryAuditHandler;
-use crate::entry_view::EntryView;
 
 /// A `DuplicatesHandler` is used to track and manage duplicate entries to prevent processing the
 /// same paths multiple times. In a ZIP archive, duplicate paths can cause overrides or undefined

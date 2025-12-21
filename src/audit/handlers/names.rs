@@ -1,7 +1,7 @@
 use super::util;
+use crate::audit::entry_audit_handler::EntryAuditHandler;
+use crate::audit::entry_view::EntryView;
 use crate::audit::report::{SuspiciousEntry, SuspiciousReason, ZipAuditReport};
-use crate::entry_audit_handler::EntryAuditHandler;
-use crate::entry_view::EntryView;
 
 pub struct NamesHandler;
 

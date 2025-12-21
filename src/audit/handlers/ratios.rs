@@ -1,8 +1,8 @@
+use crate::audit::entry_audit_handler::EntryAuditHandler;
+use crate::audit::entry_view::EntryView;
 use crate::audit::report::{
     MAX_SUSPICIOUS_RATIO, SuspiciousEntry, SuspiciousReason, ZipAuditReport,
 };
-use crate::entry_audit_handler::EntryAuditHandler;
-use crate::entry_view::EntryView;
 
 /// A `RatiosHandler` is used to track and report on compression ratios and file sizes. It detects
 /// compression-ratio bombs and provides global stats for policy decisions by accumulating total
