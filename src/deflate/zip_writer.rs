@@ -1,10 +1,10 @@
+use crate::default_entry_handler::DefaultEntryHandler;
+use crate::deflate::zip_writer_extensions::ZipWriterExtensions;
+use crate::entry_handler::EntryHandler;
 use std::fs::File;
 use std::io;
 use std::io::Write;
 use std::path::PathBuf;
-use crate::default_entry_handler::DefaultEntryHandler;
-use crate::deflate::zip_writer_extensions::ZipWriterExtensions;
-use crate::entry_handler::EntryHandler;
 use zip::result::ZipResult;
 use zip::write::{FileOptionExtension, FileOptions, SimpleFileOptions};
 use zip::{CompressionMethod, ZipWriter};
@@ -27,7 +27,11 @@ where
 {
     let file = File::create(archive_file)?;
     let mut zip_writer = ZipWriter::new(file);
-    zip_writer.create_from_directory_with_options(directory, cb_file_options, &DefaultEntryHandler)?;
+    zip_writer.create_from_directory_with_options(
+        directory,
+        cb_file_options,
+        &DefaultEntryHandler,
+    )?;
     zip_writer.finish()?;
     Ok(())
 }
@@ -59,13 +63,7 @@ impl<W: Write + io::Seek> ZipWriterExtensions for ZipWriter<W> {
             for entry in directory_entry_iterator {
                 let entry_path = entry?.path();
                 let file_options = cb_file_options(&entry_path);
-                handler.handle_entry(
-                    self,
-                    &directory,
-                    &entry_path,
-                    file_options,
-                    &mut buffer,
-                )?;
+                handler.handle_entry(self, &directory, &entry_path, file_options, &mut buffer)?;
                 let entry_metadata = std::fs::metadata(entry_path.clone())?;
                 if entry_metadata.is_dir() {
                     paths_queue.push(entry_path.clone());

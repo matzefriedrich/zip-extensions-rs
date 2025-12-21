@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.14.0] - Unreleased
+
+### Added
+
+* Adds the `eap` (early access program) module that exposes internal modules while they stabilize. [#32](https://github.com/matzefriedrich/zip-extensions-rs/pull/32)
+
+* Add a new audit module (EAP) for ZIP archives to identify security risks [#32](https://github.com/matzefriedrich/zip-extensions-rs/pull/32)
+
+* Adds the ready-made ZIP audit CLI to demo the audit module; see [Experimental: Auditing a ZIP for potential risks (ZIP audit)](docs/zip-audit.md) for further information about this feature [#32](https://github.com/matzefriedrich/zip-extensions-rs/pull/32)
+
+
 ## [0.13.1] - 2025-12-20
 
 ### Fixed

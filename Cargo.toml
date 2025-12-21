@@ -1,6 +1,6 @@
 [package]
 name = "zip-extensions"
-version = "0.13.1"
+version = "0.14.0"
 authors = ["Matthias Friedrich <rushiblegit@gmail.com>"]
 edition = "2024"
 description = "An extension crate for zip."
@@ -12,12 +12,16 @@ exclude = [
     "**/*.json",
     "**/*.yml",
     ".gitignore",
-    "tests/*"
+    "bin/*",
+    "tests/*",
+    "docs/*",
 ]
 
 [dependencies]
 zip = { version = "6.0", default-features = false }
 ignore = "0.4"
+serde = { version = "1.0", features = ["derive"], optional = true }
+serde_json = { version = "1.0", optional = true }
 
 [dev-dependencies]
 tempfile = "3.23.0"
@@ -41,3 +45,11 @@ default = [
     "lzma",
     "xz",
 ]
+
+audit-json = ["serde", "serde_json"]
+zip-audit = ["audit-json"]
+
+[[bin]]
+name = "zip-audit"
+path = "src/bin/audit/main.rs"
+required-features = ["zip-audit"]
