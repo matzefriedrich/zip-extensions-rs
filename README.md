@@ -16,8 +16,8 @@ Add the following dependencies to the `Cargo.toml` file.
 
 ````toml
 [dependencies]
-zip = "6.0"
-zip-extensions = "0.13.0"
+zip = "7.0"
+zip-extensions = "0.14.0"
 ````
 
 See https://github.com/zip-rs/zip2 fur further information about `zip` dependencies.
