@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Adds the ready-made ZIP audit CLI to demo the audit module; see [Experimental: Auditing a ZIP for potential risks (ZIP audit)](docs/zip-audit.md) for further information about this feature [#32](https://github.com/matzefriedrich/zip-extensions-rs/pull/32)
 
+* Upgrades the requirement on [zip](https://github.com/zip-rs/zip2) from `6.0` to `7.0` [#36](https://github.com/matzefriedrich/zip-extensions-rs/pull/36)
+
 
 ## [0.13.1] - 2025-12-20
 
