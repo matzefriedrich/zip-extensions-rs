@@ -1,6 +1,6 @@
 use std::fs::File;
 use std::io::Read;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use zip::result::ZipResult;
 
 /// Determines whether the specified file is a ZIP file, or not.

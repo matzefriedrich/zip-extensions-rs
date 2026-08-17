@@ -68,7 +68,7 @@ impl<W: Write + io::Seek> ZipWriterExtensions for ZipWriter<W> {
             for entry in directory_entry_iterator {
                 let entry_path = entry?.path();
                 let file_options = cb_file_options(entry_path.as_path());
-                handler.handle_entry(self, &directory, &entry_path, file_options, &mut buffer)?;
+                handler.handle_entry(self, directory, &entry_path, file_options, &mut buffer)?;
                 let entry_metadata = std::fs::metadata(entry_path.clone())?;
                 if entry_metadata.is_dir() {
                     paths_queue.push(entry_path.clone());

@@ -12,11 +12,10 @@ impl EntryAuditHandler for SymlinksHandler {
     fn visit(&mut self, view: &EntryView, report: &mut ZipAuditReport) {
         if view.symlink {
             report.has_symlinks = true;
-            if let Some(t) = &view.symlink_target {
-                if !util::is_within_root(t) {
+            if let Some(t) = &view.symlink_target
+                && !util::is_within_root(t) {
                     report.symlinks_point_outside_root += 1;
                 }
-            }
         }
     }
 }

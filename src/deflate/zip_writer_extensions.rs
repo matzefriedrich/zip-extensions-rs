@@ -1,5 +1,5 @@
 use crate::entry_handler::EntryHandler;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use zip::result::ZipResult;
 use zip::write::{FileOptionExtension, FileOptions};
 

@@ -1,7 +1,7 @@
 use crate::audit::utils::{
     absolute_path_checker, path_depth_analyzer, windows_reserved_name_checker,
 };
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 pub fn is_absolute_path_bytes(name: &[u8]) -> bool {
     absolute_path_checker::is_absolute_path_bytes(name)

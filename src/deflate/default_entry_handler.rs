@@ -3,7 +3,7 @@ use crate::file_utils::{make_relative_path, path_as_string};
 use std::fs::File;
 use std::io;
 use std::io::{Read, Write};
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use zip::ZipWriter;
 use zip::result::ZipResult;
 use zip::write::{FileOptionExtension, FileOptions};
@@ -26,7 +26,7 @@ impl<T: FileOptionExtension> EntryHandler<T> for DefaultEntryHandler {
         let relative = make_relative_path(root, entry_path);
 
         if metadata.is_file() {
-            let mut f = File::open(&entry_path)?;
+            let mut f = File::open(entry_path)?;
             f.read_to_end(buffer)?;
             writer.start_file(path_as_string(&relative), file_options)?;
             writer.write_all(buffer.as_ref())?;

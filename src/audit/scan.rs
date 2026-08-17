@@ -18,10 +18,7 @@ pub(crate) fn scan_zip_with_handlers<R: Read + Seek>(
 ) -> ZipResult<ZipAuditReport> {
     let mut report = ZipAuditReport::new();
 
-    let mut zip = match ZipArchive::new(reader) {
-        Ok(z) => z,
-        Err(e) => return Err(e),
-    };
+    let mut zip = ZipArchive::new(reader)?;
 
     for h in handlers.iter_mut() {
         h.begin(zip.len());

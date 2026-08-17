@@ -29,7 +29,7 @@ impl Default for DuplicatesHandler {
 impl EntryAuditHandler for DuplicatesHandler {
     fn visit(&mut self, view: &EntryView, report: &mut ZipAuditReport) {
         let added = self.seen.insert(view.enclosed_name.clone());
-        if added == false {
+        if !added {
             report.trace_duplicate(view.enclosed_name.clone());
         }
     }

@@ -21,6 +21,12 @@ pub struct ZipIgnoreEntryHandler<H = DefaultEntryHandler> {
 
 pub(crate) const IGNORE_FILENAME: &str = ".zipignore";
 
+impl Default for ZipIgnoreEntryHandler<DefaultEntryHandler> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl ZipIgnoreEntryHandler<DefaultEntryHandler> {
     pub fn new() -> Self {
         Self {
@@ -71,7 +77,7 @@ impl<H> ZipIgnoreEntryHandler<H> {
         }
         let built = ignore_builder
             .build()
-            .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))?;
+            .map_err(|e| io::Error::other(e.to_string()))?;
         Ok(built)
     }
 

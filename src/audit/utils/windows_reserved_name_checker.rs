@@ -1,5 +1,5 @@
 use std::borrow::Cow;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 const DEVICE_AUXILIARY: &str = "AUX";
 const DEVICE_COM1: &str = "COM1";

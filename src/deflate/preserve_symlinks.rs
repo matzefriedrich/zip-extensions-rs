@@ -3,7 +3,7 @@ use crate::preserve_symlinks_handler::PreserveSymlinksHandler;
 #[allow(unused_imports)]
 use crate::zip_writer::zip_create_from_directory_with_options;
 use std::fs::File;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use zip::ZipWriter;
 use zip::result::ZipResult;
 use zip::write::{FileOptionExtension, FileOptions};

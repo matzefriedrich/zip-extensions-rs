@@ -1,6 +1,6 @@
 use crate::inflate::zip_archive_extensions::ZipArchiveExtensions;
 use std::fs::File;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use zip::ZipArchive;
 use zip::result::{ZipError, ZipResult};
 
