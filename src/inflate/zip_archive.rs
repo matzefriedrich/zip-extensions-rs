@@ -2,13 +2,14 @@ use crate::file_utils::file_write_all_bytes;
 use crate::inflate::zip_archive_extensions::ZipArchiveExtensions;
 use std::io;
 use std::io::{Error, ErrorKind, Read};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use zip::ZipArchive;
 use zip::read::ZipFile;
 use zip::result::{ZipError, ZipResult};
-
 impl<R: Read + io::Seek> ZipArchiveExtensions for ZipArchive<R> {
-    fn extract(&mut self, target_directory: &PathBuf) -> ZipResult<()> {
+    fn extract(&mut self, target_directory: impl AsRef<Path>) -> ZipResult<()> {
+        let target_directory = target_directory.as_ref();
+
         if !target_directory.is_dir() {
             return Err(ZipError::Io(Error::new(
                 ErrorKind::InvalidInput,
@@ -39,13 +40,13 @@ impl<R: Read + io::Seek> ZipArchiveExtensions for ZipArchive<R> {
     fn extract_file(
         &mut self,
         file_number: usize,
-        destination_file_path: &PathBuf,
+        destination_file_path: impl AsRef<Path>,
         overwrite: bool,
     ) -> ZipResult<()> {
         let mut buffer: Vec<u8> = Vec::new();
         self.extract_file_to_memory(file_number, &mut buffer)?;
         file_write_all_bytes(
-            destination_file_path.to_path_buf(),
+            destination_file_path.as_ref().to_path_buf(),
             buffer.as_ref(),
             overwrite,
         )?;
@@ -73,7 +74,9 @@ impl<R: Read + io::Seek> ZipArchiveExtensions for ZipArchive<R> {
         Ok(next.mangled_name())
     }
 
-    fn file_number(&mut self, entry_path: &PathBuf) -> Option<usize> {
+    fn file_number(&mut self, entry_path: impl AsRef<Path>) -> Option<usize> {
+        let entry_path = entry_path.as_ref();
+
         for file_number in 0..self.len() {
             if let Ok(next) = self.by_index(file_number) {
                 let sanitized_name = next.mangled_name();

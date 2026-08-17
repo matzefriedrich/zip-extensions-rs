@@ -1,5 +1,5 @@
 use std::borrow::Cow;
-use std::path::PathBuf;
+use std::path::Path;
 
 const DEVICE_AUXILIARY: &str = "AUX";
 const DEVICE_COM1: &str = "COM1";
@@ -61,12 +61,15 @@ const RESERVED_DEVICE_NAMES: [&str; 28] = [
     DEVICE_LPT_SUP_3,
 ];
 
-pub fn is_windows_reserved_name(path: &PathBuf) -> bool {
-    WindowsReservedNameChecker { path }.is_reserved_device_name()
+pub fn is_windows_reserved_name(path: impl AsRef<Path>) -> bool {
+    WindowsReservedNameChecker {
+        path: path.as_ref(),
+    }
+    .is_reserved_device_name()
 }
 
 struct WindowsReservedNameChecker<'a> {
-    path: &'a PathBuf,
+    path: &'a Path,
 }
 
 impl<'a> WindowsReservedNameChecker<'a> {

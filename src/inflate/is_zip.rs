@@ -1,10 +1,12 @@
 use std::fs::File;
 use std::io::Read;
-use std::path::PathBuf;
+use std::path::Path;
 use zip::result::ZipResult;
 
 /// Determines whether the specified file is a ZIP file, or not.
-pub fn try_is_zip(file: &PathBuf) -> ZipResult<bool> {
+pub fn try_is_zip(file: impl AsRef<Path>) -> ZipResult<bool> {
+    let file = file.as_ref();
+
     const ZIP_SIGNATURE: [u8; 2] = [0x50, 0x4b];
     const ZIP_ARCHIVE_FORMAT: [u8; 6] = [0x03, 0x04, 0x05, 0x06, 0x07, 0x08];
     let mut file = File::open(file)?;
@@ -27,6 +29,6 @@ pub fn try_is_zip(file: &PathBuf) -> ZipResult<bool> {
 }
 
 /// Determines whether the specified file is a ZIP file, or not.
-pub fn is_zip(file: &PathBuf) -> bool {
+pub fn is_zip(file: impl AsRef<Path>) -> bool {
     try_is_zip(file).unwrap_or_default()
 }

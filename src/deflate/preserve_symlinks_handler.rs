@@ -3,7 +3,7 @@ use crate::entry_handler::EntryHandler;
 use crate::file_utils::make_relative_path;
 use std::io;
 use std::io::Write;
-use std::path::PathBuf;
+use std::path::Path;
 use zip::ZipWriter;
 use zip::result::ZipResult;
 use zip::write::{FileOptionExtension, FileOptions};
@@ -16,6 +16,12 @@ use zip::write::{FileOptionExtension, FileOptions};
 /// instead.
 pub struct PreserveSymlinksHandler<H = DefaultEntryHandler> {
     inner: H,
+}
+
+impl Default for PreserveSymlinksHandler<DefaultEntryHandler> {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl PreserveSymlinksHandler<DefaultEntryHandler> {
@@ -43,11 +49,13 @@ where
     fn handle_entry<W: Write + io::Seek>(
         &self,
         writer: &mut ZipWriter<W>,
-        root: &PathBuf,
-        entry_path: &PathBuf,
+        root: impl AsRef<Path>,
+        entry_path: impl AsRef<Path>,
         file_options: FileOptions<T>,
         buffer: &mut Vec<u8>,
     ) -> ZipResult<()> {
+        let entry_path = entry_path.as_ref();
+        let root = root.as_ref();
         let symlink_metadata = std::fs::symlink_metadata(entry_path)?;
         let relative = make_relative_path(root, entry_path);
 

@@ -30,7 +30,7 @@ impl<'a> AbsolutePathChecker<'a> {
 
     #[inline]
     fn is_ascii_alpha(c: u8) -> bool {
-        (b'A'..=b'Z').contains(&c) || (b'a'..=b'z').contains(&c)
+        c.is_ascii_uppercase() || c.is_ascii_lowercase()
     }
 
     #[inline]

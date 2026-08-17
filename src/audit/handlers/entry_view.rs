@@ -55,7 +55,7 @@ impl EntryView {
             }
         }
 
-        let view = EntryView {
+        EntryView {
             compressed_size,
             depth_hint,
             enclosed_name,
@@ -69,8 +69,6 @@ impl EntryView {
             symlink_target,
             uncompressed_size,
             unix_mode,
-        };
-
-        view
+        }
     }
 }

@@ -4,7 +4,7 @@ mod tests {
     use std::path::PathBuf;
 
     fn reserved(name: &str) -> bool {
-        is_windows_reserved_name(&PathBuf::from(name))
+        is_windows_reserved_name(PathBuf::from(name))
     }
 
     #[test]

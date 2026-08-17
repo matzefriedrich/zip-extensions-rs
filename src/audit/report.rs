@@ -72,6 +72,12 @@ pub enum SuspiciousReason {
     HeaderMismatch,
 }
 
+impl Default for ZipAuditReport {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl ZipAuditReport {
     pub fn new() -> Self {
         Self {
