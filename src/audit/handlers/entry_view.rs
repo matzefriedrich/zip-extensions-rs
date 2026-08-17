@@ -55,8 +55,6 @@ impl EntryView {
             }
         }
 
-        
-
         EntryView {
             compressed_size,
             depth_hint,
