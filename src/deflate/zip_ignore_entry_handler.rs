@@ -107,14 +107,15 @@ where
     fn handle_entry<W: Write + io::Seek>(
         &self,
         writer: &mut ZipWriter<W>,
-        root: &PathBuf,
-        entry_path: &PathBuf,
+        root: impl AsRef<Path>,
+        entry_path: impl AsRef<Path>,
         file_options: FileOptions<T>,
         buffer: &mut Vec<u8>,
     ) -> ZipResult<()> {
+        let entry_path = entry_path.as_ref();
         let metadata = std::fs::metadata(entry_path)?;
         let is_dir = metadata.is_dir();
-        if self.is_ignored(root.as_path(), entry_path.as_path(), is_dir) {
+        if self.is_ignored(root.as_ref(), entry_path, is_dir) {
             return Ok(());
         }
         self.inner

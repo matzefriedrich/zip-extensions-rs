@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io;
 use std::io::{Error, ErrorKind, Write};
-use std::path::{Component, PathBuf};
+use std::path::{Component, Path, PathBuf};
 
 /// Writes all bytes to a file.
 pub fn file_write_all_bytes(path: PathBuf, bytes: &[u8], overwrite: bool) -> io::Result<usize> {
@@ -17,7 +17,10 @@ pub fn file_write_all_bytes(path: PathBuf, bytes: &[u8], overwrite: bool) -> io:
 }
 
 /// Returns a relative path from one path to another.
-pub(crate) fn make_relative_path(root: &PathBuf, current: &PathBuf) -> PathBuf {
+pub(crate) fn make_relative_path(root: impl AsRef<Path>, current: impl AsRef<Path>) -> PathBuf {
+    let root = root.as_ref();
+    let current = current.as_ref();
+
     let mut result = PathBuf::new();
     let root_components = root.components().collect::<Vec<Component>>();
     let current_components = current.components().collect::<Vec<_>>();

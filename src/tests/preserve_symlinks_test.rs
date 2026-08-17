@@ -3,7 +3,7 @@ mod tests {
     use crate::preserve_symlinks::zip_create_from_directory_preserve_symlinks_with_options;
     use std::fs::{self, File};
     use std::io::Read;
-    use std::path::PathBuf;
+    use std::path::{Path, PathBuf};
     use tempfile::{TempDir, tempdir};
     use zip::CompressionMethod;
     use zip::read::{ZipArchive, ZipFile};
@@ -22,9 +22,7 @@ mod tests {
         zip_create_from_directory_preserve_symlinks_with_options(
             &archive_path,
             &source.source_folder_path,
-            |_p: &PathBuf| {
-                SimpleFileOptions::default().compression_method(CompressionMethod::Stored)
-            },
+            |_p: &Path| SimpleFileOptions::default().compression_method(CompressionMethod::Stored),
         )
         .expect("Failed to create archive");
 
@@ -100,8 +98,12 @@ mod tests {
         archive
     }
 
-    fn add_regular_file(root_folder_path: &PathBuf, name: String, content: String) -> PathBuf {
-        let file_path = root_folder_path.join(name);
+    fn add_regular_file(
+        root_folder_path: impl AsRef<Path>,
+        name: String,
+        content: String,
+    ) -> PathBuf {
+        let file_path = root_folder_path.as_ref().join(name);
         fs::write(&file_path, content).unwrap();
         file_path
     }

@@ -3,7 +3,7 @@ use crate::preserve_symlinks_handler::PreserveSymlinksHandler;
 #[allow(unused_imports)]
 use crate::zip_writer::zip_create_from_directory_with_options;
 use std::fs::File;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use zip::ZipWriter;
 use zip::result::ZipResult;
 use zip::write::{FileOptionExtension, FileOptions};
@@ -38,13 +38,13 @@ use zip::write::{FileOptionExtension, FileOptions};
 /// - For general distribution or untrusted extraction environments,
 ///   use `zip_create_from_directory_with_options` instead.
 pub fn zip_create_from_directory_preserve_symlinks_with_options<F, T>(
-    archive_file: &PathBuf,
-    directory: &PathBuf,
+    archive_file: impl AsRef<Path>,
+    directory: impl AsRef<Path>,
     cb_file_options: F,
 ) -> ZipResult<()>
 where
     T: FileOptionExtension,
-    F: Fn(&PathBuf) -> FileOptions<T>,
+    F: Fn(&Path) -> FileOptions<T>,
 {
     let file = File::create(archive_file)?;
     let mut zip_writer = ZipWriter::new(file);

@@ -1,15 +1,15 @@
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use zip::result::ZipResult;
 
 pub trait ZipArchiveExtensions {
     /// Extracts the current archive to the given directory path.
-    fn extract(&mut self, path: &PathBuf) -> ZipResult<()>;
+    fn extract(&mut self, path: impl AsRef<Path>) -> ZipResult<()>;
 
     /// Extracts an entry in the zip archive to a file.
     fn extract_file(
         &mut self,
         file_number: usize,
-        destination_file_path: &PathBuf,
+        destination_file_path: impl AsRef<Path>,
         overwrite: bool,
     ) -> ZipResult<()>;
 
@@ -21,5 +21,5 @@ pub trait ZipArchiveExtensions {
     fn entry_path(&mut self, file_number: usize) -> ZipResult<PathBuf>;
 
     /// Finds the index of the specified entry.
-    fn file_number(&mut self, entry_path: &PathBuf) -> Option<usize>;
+    fn file_number(&mut self, entry_path: impl AsRef<Path>) -> Option<usize>;
 }

@@ -5,7 +5,7 @@ mod tests {
     use crate::zip_ignore_entry_handler::IGNORE_FILENAME;
     use std::fs;
     use std::fs::File;
-    use std::path::PathBuf;
+    use std::path::{Path, PathBuf};
     use tempfile::{TempDir, tempdir};
     use zip::read::ZipArchive;
     use zip::write::SimpleFileOptions;
@@ -105,7 +105,7 @@ mod tests {
             zip_writer
                 .create_from_directory_with_options(
                     &self.source_folder_path,
-                    |_p: &PathBuf| options,
+                    |_p: &Path| options,
                     &ZipIgnoreEntryHandler::new(),
                 )
                 .expect("Failed to create archive");
